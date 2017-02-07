@@ -7,7 +7,7 @@ XAxis = React.createClass
     render: ->
         {width, height, x} = @props
 
-        <svg className='axis x-axis' style={{width, height, position: 'absolute', bottom: 0, right: padding}}>
+        <svg className='axis x-axis' style={{width, height, position: 'absolute', bottom: 0, left: padding}}>
             {x.ticks(width / 40).map (t) ->
                 <text x={x(t)} y={height - 6} textAnchor='middle'>{t}</text>
             }
