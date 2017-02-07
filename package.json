@@ -1,16 +1,17 @@
 {
-    "name": "zamba-charts",
-    "version": "0.0.1",
-    "repository": {
-        "type": "git",
-        "url": "http://github.com/prontotype-us/zamba-charts.git"
-    },
-    "main": "lib/index.js",
-    "scripts": {
-        "build": "cjsx --bare -o lib -c src ; coffee do-reload.coffee"
-    },
-    "dependencies": {
-        "d3": "4.2.x",
-        "react": "15.3.x"
-    }
+  "name": "zamba-charts",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/prontotype-us/zamba-charts.git"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "cjsx --bare -o lib -c src ; coffee do-reload.coffee"
+  },
+  "dependencies": {
+    "d3": "^4.2.8",
+    "react": "15.3.x",
+    "somata-socketio-client": "0.0.1"
+  }
 }
