@@ -42,7 +42,7 @@ module.exports = Chart = React.createClass
             .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
 
-        <div className='chart' style={position: 'relative', padding: padding, display: 'inline-block', verticalAlign: 'top', margin: 5}>
+        <div className='chart' style={position: 'relative', padding: padding}>
             {React.cloneElement children, {width, height, data, x, y}}
             <XAxis x=x width=width height=padding />
             <YAxis y=y width=padding height=height />
