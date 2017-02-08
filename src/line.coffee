@@ -7,6 +7,14 @@ module.exports = LineChart = React.createClass
         curve: true
         fill: true
 
+    shouldComponentUpdate: (next_props, next_state) ->
+        if next_props.data.length != @props.data.length
+            return true
+        else if next_props.width != @props.width or next_props.height != @props.height
+            return true
+        else
+            return false
+
     render: ->
         {width, height, data, x, y, curve, fill} = @props
 

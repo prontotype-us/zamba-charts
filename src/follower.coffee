@@ -3,7 +3,7 @@ d3 = require 'd3'
 
 r = 5
 
-module.exports = Follower = ({width, height, data, x, y, colors, mouseX, mouseY}) ->
+module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY}) ->
     xx = x.invert mouseX
 
     <div className='follower-container' style={{width, height, position: 'absolute'}}>
@@ -23,10 +23,10 @@ module.exports = Follower = ({width, height, data, x, y, colors, mouseX, mouseY}
             left: 0
             background: '#eee'
         }} />
-        {data.map (ds, di) ->
+        {datas.map (data, di) ->
             follower = {}
             yy = 0
-            for d in ds
+            for d in data
                 if d.x > xx
                     yy = d.y
                     break
@@ -48,7 +48,7 @@ module.exports = Follower = ({width, height, data, x, y, colors, mouseX, mouseY}
                         width: 2 * r
                         height: 2 * r
                         borderRadius: r
-                        background: colors[di]
+                        background: color(data.id or di)
                     }}
                 />
                 <span className='follower-label'
