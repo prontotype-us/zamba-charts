@@ -21,11 +21,13 @@ module.exports = Chart = React.createClass
         mouseX: 200
         mouseY: 200
 
-    componentWillMount: -> @createAxes()
-    componentWillReceiveProps: -> @createAxes()
+    componentWillMount: ->
+        @createAxes @props
+    componentWillReceiveProps: (next_props) ->
+        @createAxes next_props
 
-    createAxes: ->
-        {width, height, data, datas, adjust} = @props
+    createAxes: (props) ->
+        {width, height, data, datas, adjust} = props
         if !data? and datas?
             data = flatten datas
         x_extent = d3.extent(data, (d) -> d.x)
@@ -38,12 +40,14 @@ module.exports = Chart = React.createClass
         if false
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
-        @x = d3.scaleLinear()
+        x = d3.scaleLinear()
             .range([0, width])
             .domain(x_extent)
-        @y = d3.scaleLinear()
+        y = d3.scaleLinear()
             .range([height, 0])
             .domain(y_extent)
+
+        @setState {x, y}
 
     onMouseMove: (e) ->
         bounds = @refs.container.getBoundingClientRect()
@@ -63,11 +67,11 @@ module.exports = Chart = React.createClass
                     padding,
                     key: data.id or di,
                     color: color(data.id or di),
-                    x: @x, y: @y
+                    x: @state.x, y: @state.y
                 }
             }
-            <XAxis x=@x width=width height=axis_size padding=padding position='bottom' />
-            <YAxis y=@y width=axis_size height=height padding=padding />
-            <Follower width=width height=height datas={datas} color=color x=@x y=@y mouseX=@state.mouseX mouseY=@state.mouseY />
+            <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' />
+            <YAxis y=@state.y width=axis_size height=height padding=padding />
+            <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />
         </div>
 
