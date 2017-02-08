@@ -3,4 +3,6 @@ module.exports = {
     PieChart: require './pie'
     BarChart: require './bar'
     Chart: require './chart'
+    Follower: require './follower'
+    axes: require './axes'
 }
