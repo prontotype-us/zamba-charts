@@ -24,9 +24,9 @@ module.exports = LineChart = React.createClass
 
         d = line data
 
-        <svg style={{width, height, background: '#fff'}}>
+        <svg className='line-chart' style={{width, height}}>
             {if fill
-                da = line [{x:0, y:0}].concat(data).concat([{x:data.length-1, y: 0}])
+                da = line data
                 <path 
                     d=da
                     fill=@props.color

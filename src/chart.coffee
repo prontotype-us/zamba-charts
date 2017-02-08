@@ -1,31 +1,13 @@
 React = require 'react'
 d3 = require 'd3'
-
-padding = 20
-
-XAxis = React.createClass
-    render: ->
-        {width, height, x} = @props
-
-        <svg className='axis x-axis' style={{width, height, position: 'absolute', bottom: 0, left: padding}}>
-            {x.ticks(width / 40).map (t) ->
-                <text x={x(t)} y={height - 6} textAnchor='middle'>{t}</text>
-            }
-        </svg>
-
-YAxis = React.createClass
-    render: ->
-        {width, height, y} = @props
-
-        <svg className='axis y-axis' style={{width, height, position: 'absolute', left: 0, top: padding}}>
-            {y.ticks(height / 20).map (t) ->
-                <text y={y(t) + 6} x={width/2} textAnchor='middle'>{t}</text>
-            }
-        </svg>
+{XAxis, YAxis} = require './axes'
 
 module.exports = Chart = React.createClass
+    getDefaultProps: ->
+        padding: 20
+
     render: ->
-        {width, height, data, title, children, adjust} = @props
+        {width, height, data, title, children, adjust, padding} = @props
 
         width -= (padding * 2)
         height -= padding
@@ -34,13 +16,16 @@ module.exports = Chart = React.createClass
         if adjust
             x_extent[0] -= 0.5
             x_extent[1] += 0.5
+        y_extent = d3.extent(data, (d) -> d.y)
+        if false
+            y_extent = [0, d3.max(data, (d) -> d.y)]
 
         x = d3.scaleLinear()
-            .domain(x_extent)
             .range([0, width])
+            .domain(x_extent)
         y = d3.scaleLinear()
-            .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
+            .domain(y_extent)
 
         <div className='chart' style={position: 'relative', padding: padding}>
             {React.cloneElement children, {width, height, data, x, y}}
