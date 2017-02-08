@@ -6,7 +6,7 @@ r = 5
 module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY}) ->
     xx = x.invert mouseX
 
-    <div className='follower-container' style={{width, height, position: 'absolute'}}>
+    <div className='follower-container' style={{width, height, position: 'absolute', top: 0, left: 0}}>
         <div className='follower-line' style={{
             width: 1
             height: height
