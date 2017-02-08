@@ -14,16 +14,18 @@ module.exports = PieChart = React.createClass
         arc = d3.arc().innerRadius(0).outerRadius(radius).padRadius(2)
         arcs = pie(data).map (d) -> arc(d)
 
-        <svg className='pie-chart' style={{position: 'relative', width, height, top: radius, left: radius}}>
-            {arcs.map (d, di) =>
-                <path
-                    key=di
-                    x=radius
-                    y=radius
-                    d=d
-                    fill={data[di].color || color(di)}
-                />
-            }
+        <svg className='pie-chart' style={{position: 'relative', width, height}}>
+            <g transform="translate(#{radius},#{radius})" >
+                {arcs.map (d, di) =>
+                    <path
+                        key=di
+                        x=radius
+                        y=radius
+                        d=d
+                        fill={data[di].color || color(di)}
+                    />
+                }
+            </g>
         </svg>
 
 
