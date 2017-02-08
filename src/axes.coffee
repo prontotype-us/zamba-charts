@@ -2,7 +2,7 @@ React = require 'react'
 
 exports.XAxis = React.createClass
     render: ->
-        {width, height, x} = @props
+        {width, height, x, padding} = @props
 
         <svg className='axis x-axis' style={{width, height, position: 'absolute', bottom: 0, left: padding}}>
             {x.ticks(10).map (t, ti) ->
@@ -12,7 +12,7 @@ exports.XAxis = React.createClass
 
 exports.YAxis = React.createClass
     render: ->
-        {width, height, y} = @props
+        {width, height, y, padding} = @props
 
         <svg className='axis y-axis' style={{width, height, position: 'absolute', left: 0, top: padding}}>
             {y.ticks(height / 20).map (t, ti) ->

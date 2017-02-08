@@ -28,8 +28,8 @@ module.exports = Chart = React.createClass
             .domain(y_extent)
 
         <div className='chart' style={position: 'relative', padding: padding}>
-            {React.cloneElement children, {width, height, data, x, y}}
-            <XAxis x=x width=width height=padding />
-            <YAxis y=y width=padding height=height />
+            {React.cloneElement children, {width, height, data, x, y, padding}}
+            <XAxis x=x width=width height=padding padding=padding />
+            <YAxis y=y width=padding height=height padding=padding />
         </div>
 
