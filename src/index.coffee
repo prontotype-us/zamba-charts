@@ -5,4 +5,5 @@ module.exports = {
     Chart: require './chart'
     Follower: require './follower'
     axes: require './axes'
+    bin: require './bin'
 }
