@@ -19,9 +19,9 @@ module.exports = LineChart = React.createClass
 
     render: ->
         {width, height, data, x, y, curve, fill} = @props
-
+        x_extent = d3.extent(data, (d) -> d.x)
         x ||= d3.scaleLinear()
-            .domain(d3.extent(data, (d) -> d.x))
+            .domain(x_extent)
             .range([0, width])
         y ||= d3.scaleLinear()
             .domain([0, d3.max(data, (d) -> d.y)])
@@ -36,7 +36,7 @@ module.exports = LineChart = React.createClass
 
         <svg className='line-chart' style={{width, height}}>
             {if fill
-                da = line data
+                da = line [x: 0, y: 0].concat(data).concat([x: x_extent[1], y: 0])
                 <path 
                     d=da
                     fill=@props.color
