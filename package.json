@@ -1,6 +1,6 @@
 {
   "name": "zamba-charts",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "http://github.com/prontotype-us/zamba-charts.git"
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "d3": "^4.2.8",
-    "react": "15.3.x",
+    "react": "^15.4.2",
     "somata-socketio-client": "0.0.1"
   }
 }
