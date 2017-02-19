@@ -7,8 +7,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "build": "cjsx --bare -o lib -c src ; coffee do-reload.coffee",
-    "build2": "cjsx --bare -o lib -c src ; cp lib/*.js ../sconce-dashboard/node_modules/zamba-charts/lib/ ; coffee do-reload.coffee"
+    "build": "cjsx --bare -o lib -c src ; coffee do-reload.coffee"
   },
   "dependencies": {
     "d3": "^4.2.8",
