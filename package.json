@@ -7,7 +7,7 @@
   },
   "main": "lib/index.js",
   "scripts": {
-    "build": "cjsx --bare -o lib -c src ; coffee do-reload.coffee"
+    "build": "cjsx --bare -o lib -c src ; coffee ../auto-reload/do-reload.coffee"
   },
   "dependencies": {
     "d3": "^4.2.8",
