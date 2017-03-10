@@ -17,11 +17,13 @@ exports.XAxis = React.createClass
 
 exports.YAxis = React.createClass
     render: ->
-        {width, height, y, padding} = @props
+        {width, height, y, options, padding} = @props
+
+        sig_figs = 0
 
         <svg className='axis y-axis' style={{width, height, position: 'absolute', left: 0, top: padding}}>
-            {y.ticks(height / 20).map (t, ti) ->
-                <text y={y(t) + 6} x={width/2} textAnchor='middle' key=ti>{t.toFixed(2)}</text>
+            {y.ticks(options?.tics || (height / 20)).map (t, ti) ->
+                <text y={y(t)} x={width/2} textAnchor='middle' key=ti>{t.toFixed(0)}</text>
             }
         </svg>
 

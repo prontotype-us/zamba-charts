@@ -27,7 +27,7 @@ module.exports = Chart = React.createClass
         @createAxes next_props
 
     createAxes: (props) ->
-        {width, height, data, datas, adjust} = props
+        {width, height, data, datas, adjust, options} = props
         if !data? and datas?
             data = flatten datas
         x_extent = d3.extent(data, (d) -> d.x)
@@ -37,7 +37,7 @@ module.exports = Chart = React.createClass
             x_extent[1] += 0.5
 
         y_extent = d3.extent(data, (d) -> d.y)
-        if false
+        if options.axes?.y?.zero
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
         x = d3.scaleLinear()
@@ -56,9 +56,11 @@ module.exports = Chart = React.createClass
         @setState {mouseX, mouseY}
 
     render: ->
-        {width, height, data, datas, title, children, adjust, padding, axis_size, color} = @props
+        {width, height, data, datas, title, children, adjust, padding, axis_size, color, options} = @props
         if data? and !datas?
             datas = [data]
+
+        {show_follower} = options
 
         <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
             {datas.map (data, di) =>
@@ -70,8 +72,7 @@ module.exports = Chart = React.createClass
                     x: @state.x, y: @state.y
                 }
             }
-            <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' />
-            <YAxis y=@state.y width=axis_size height=height padding=padding />
-            <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />
+            <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' tics=7 />
+            <YAxis y=@state.y width=axis_size height=height padding=padding options=options?.axes?.y />
+            {if show_follower then <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />}
         </div>
-
