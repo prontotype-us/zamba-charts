@@ -72,7 +72,7 @@ module.exports = Chart = React.createClass
                     x: @state.x, y: @state.y
                 }
             }
-            <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' tics=7 />
+            <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' options=options?.axes?.x />
             <YAxis y=@state.y width=axis_size height=height padding=padding options=options?.axes?.y />
             {if show_follower then <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />}
         </div>

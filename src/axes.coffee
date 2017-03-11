@@ -2,7 +2,7 @@ React = require 'react'
 
 exports.XAxis = React.createClass
     render: ->
-        {width, height, x, padding, position} = @props
+        {width, height, x, options, padding, position} = @props
 
         style = {width, height, position: 'absolute', left: padding}
         if position == 'bottom'
@@ -10,7 +10,7 @@ exports.XAxis = React.createClass
         else
             style.top = 0
         <svg className='axis x-axis' style={style}>
-            {x.ticks(10).map (t, ti) ->
+            {x.ticks(options?.tics || 10).map (t, ti) ->
                 <text x={x(t)} y={height - 6} textAnchor='middle' key=ti>{t.toFixed(0)}</text>
             }
         </svg>
@@ -18,8 +18,6 @@ exports.XAxis = React.createClass
 exports.YAxis = React.createClass
     render: ->
         {width, height, y, options, padding} = @props
-
-        sig_figs = 0
 
         <svg className='axis y-axis' style={{width, height, position: 'absolute', left: 0, top: padding}}>
             {y.ticks(options?.tics || (height / 20)).map (t, ti) ->
