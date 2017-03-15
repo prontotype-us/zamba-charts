@@ -20,7 +20,7 @@ exports.YAxis = React.createClass
         {width, height, y, options, padding} = @props
 
         <svg className='axis y-axis' style={{width, height, position: 'absolute', left: 0, top: padding}}>
-            {y.ticks(options?.tics || (height / 20)).map (t, ti) ->
+            {y.ticks(options?.ticks || (height / 20)).map (t, ti) ->
                 <text y={y(t)} x={width/2} textAnchor='middle' key=ti>{t.toFixed(0)}</text>
             }
         </svg>
