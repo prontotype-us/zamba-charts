@@ -30,6 +30,7 @@ module.exports = Chart = React.createClass
         {width, height, data, datas, adjust, options} = props
         if !data? and datas?
             data = flatten datas
+
         x_extent = d3.extent(data, (d) -> d.x)
 
         if adjust
@@ -56,17 +57,19 @@ module.exports = Chart = React.createClass
         @setState {mouseX, mouseY}
 
     render: ->
-        {width, height, data, datas, title, children, adjust, padding, axis_size, color, options} = @props
+        {width, height, data, datas, title, children, adjust, padding, colorer, axis_size, color, options} = @props
         if data? and !datas?
             datas = [data]
 
+        chart_options = options.chart
         {show_follower} = options
 
         <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
             {datas.map (data, di) =>
                 React.cloneElement children, {
                     width, height, data,
-                    padding,
+                    padding, colorer,
+                    options: chart_options
                     key: data.id or di,
                     color: color(data.id or di),
                     x: @state.x, y: @state.y

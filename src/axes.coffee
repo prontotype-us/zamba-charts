@@ -24,4 +24,3 @@ exports.YAxis = React.createClass
                 <text y={y(t)} x={width/2} textAnchor='middle' key=ti>{t.toFixed(0)}</text>
             }
         </svg>
-
