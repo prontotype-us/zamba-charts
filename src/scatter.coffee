@@ -23,7 +23,7 @@ module.exports = ScatterChart = React.createClass
 
         <svg className='scatter-chart' style={{width, height}}>
             {data.map (d, i) ->
-                <circle className='dot' r=2 key=i
+                <circle className='dot' r=3 key=i
                     cx=x(d.x)
                     cy=y(d.y)
                     fill={d.color}
