@@ -1,6 +1,7 @@
 module.exports = {
     LineChart: require './line'
     PieChart: require './pie'
+    ScatterChart: require './scatter'
     BarChart: require './bar'
     LabeledBarChart: require './labeled-bar'
     Chart: require './chart'
