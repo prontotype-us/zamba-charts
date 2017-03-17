@@ -18,7 +18,7 @@ exports.XAxis = React.createClass
         else
             style.top = 0
         <svg className='axis x-axis' style={style}>
-            {x.ticks(options?.tics || 10).map (t, ti) =>
+            {x.ticks(options?.ticks || 10).map (t, ti) =>
                 label = if options?.formatter? then options.formatter(t)() else t.toFixed(0)
                 <text x={x(t)} y={height - 6} textAnchor='middle' key=ti>{label}</text>
             }
