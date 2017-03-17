@@ -22,7 +22,7 @@ Gauge = React.createClass
         }
         # console.log d
         d = arc# arc_params
-        <g key='guide' className='guide' transform="translate(#{radius}, #{radius})" >
+        <g key='guide' className='guide' >
             <path
                 onClick={->}
                 key='guide-path'
@@ -48,7 +48,7 @@ Gauge = React.createClass
         # 
         # }
         {width, height, options} = @props
-        {min, max, start_angle, end_angle, show_value, guide, bar} = options
+        {min, max, start_angle, end_angle, show_value, guide, bar, label_padding} = options
 
         @min ||= 0
         @max ||= 100
@@ -57,7 +57,8 @@ Gauge = React.createClass
 
         @thickness = thickness = bar?.thickness || 25
         @guide_thickness = guide?.thickness || 4
-        @radius = radius = Math.min(width, height) / 2
+        label_padding ||= 0
+        @radius = radius = (Math.min(width, height) / 2) - label_padding
 
         @start_angle = start_angle ||= 0
         @end_angle = end_angle ||= Math.PI *2
@@ -81,7 +82,7 @@ Gauge = React.createClass
 
             [label_x, label_y] = arc.outerRadius(radius + 75).centroid arc_params
 
-            <g key=i transform="translate(#{radius}, #{radius})" >
+            <g key=i >
                 <path
                     onClick={->}
                     key=i
@@ -105,28 +106,30 @@ Gauge = React.createClass
             .cornerRadius(2).startAngle(start_angle)
 
         <svg className='gauge-chart' key='gauge' style={{position: 'relative', width, height}}>
-            {if !options.guide?.hidden
-                @renderGuide()
-            }
-            <g className='gauge-bar' transform="translate(#{radius}, #{radius})">
-                {
-                    di = 0
-                    d = arc {endAngle: @angleFromValue(value)}
-                    a_color = value_color || color(di)
-                    <path
-                        onClick={->}
-                        key=di
-                        x=radius
-                        y=radius
-                        d=d
-                        fill={if di == 1 then 'none' else a_color} />}
+            <g key='mover' transform="translate(#{radius+label_padding}, #{radius+label_padding})" >
+                {if !options.guide?.hidden
+                    @renderGuide()
+                }
+                <g className='gauge-bar'>
+                    {
+                        di = 0
+                        d = arc {endAngle: @angleFromValue(value)}
+                        a_color = value_color || color(di)
+                        <path
+                            onClick={->}
+                            key=di
+                            x=radius
+                            y=radius
+                            d=d
+                            fill={if di == 1 then 'none' else a_color} />}
+                </g>
+                {if show_value
+                    <text className='value' x={0} y={label_d_y} textAnchor='middle'>{value}</text>
+                }
+                {if markers?.length
+                    markers.map renderMarker
+                }
             </g>
-            {if show_value
-                <text className='value' x={radius} y={radius+label_d_y} textAnchor='middle'>{value}</text>
-            }
-            {if markers?.length
-                markers.map renderMarker
-            }
         </svg>
 
 
