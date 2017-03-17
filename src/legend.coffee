@@ -1,7 +1,6 @@
 React = require 'react'
 
 module.exports = Legend = ({data, className=''}) ->
-    console.log data
     <div className="legend  #{className}">
         {data.map (d, j) ->
             <div key=j className="legend-entry">
