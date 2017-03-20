@@ -1,10 +1,10 @@
 # Zamba Charts
 
-### Components
+### General Components
 
 #### Chart
 
-A wrapper component for rendering a chart, resizing it, and managing rendering of axes and followers. Configure the chart component and its axes with `options`
+A wrapper component for rendering a chart, resizing it, and managing rendering of axes and followers. Configure the chart component and its axes with `options`.
 
     props:
         title: String
@@ -28,7 +28,7 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
         YAxis
         Follower
 
-##### Legend
+#### Legend
 
     props:
         className: String
@@ -37,25 +37,32 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
             label: String
         ]
 
-### Axes
-
 #### XAxis
 
     props:
         x: d3.scale
         formatter: (d) -> String
+        options:
+            hidden: Boolean
+            ticks: Int # passed to d3
+            label: String
 
 #### YAxis
 
     props:
         y: d3.scale
         formatter: (d) -> String
+        options:
+            hidden: Boolean
+            ticks: Int # passed to d3
+            label: String
+
+Some Chart Types allow you to flip horizontally, which transforms the data, svg rendering functions, and labels between axes.
 
 
 ### Chart Types
 
-Every Chart has `height` and `width` in its props. You can also override the default x and y axes (scaled 0 to the maximum value on this axis) by passing a configured d3 scale `x` or `y` into props.
-
+Every Chart has `height` and `width` in its props. You can also override the default x and y axes (scaled 0 to the axis' maximum value) by passing a configured d3 scale `x` or `y` into props. You can also pass in `color`, or do this on each respective datapoint. Decorate your data with color based off of a color key while you are slicing it into series and/or configuring the legend.
 
 #### Bar
 
@@ -88,7 +95,7 @@ Histogram chart to display counts over a set of labeled bins.
             y: Int
         ]
         curve: Boolean
-        fill: String #color
+        fill: Boolean
 
 
 #### Scatter
@@ -114,7 +121,7 @@ Histogram chart to display counts over a set of labeled bins.
 
 #### Gauge
 
-Displaying a value produced within a set range. Optionally pass in markers to display baselines, averages, or other comparisons.
+Displaying a value produced within a set range. Optionally pass in markers to display baselines, averages, or other comparisons. Override the default range of 0 to 100 with `options.{min, max}`. You can also pass in options to configure `start_angle` and `end_angle`. Default is 12 o clock, or 0 radians.
 
     props:
         data: [
