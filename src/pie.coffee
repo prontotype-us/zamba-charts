@@ -6,7 +6,7 @@ module.exports = PieChart = React.createClass
         color: '#000'
 
     render: ->
-        {width, height, data, x, y, padding, onClick} = @props
+        {width, height, data, onClick} = @props
 
         radius = Math.min(width, height) / 2
         color = d3.scaleOrdinal(d3.schemeCategory20)
