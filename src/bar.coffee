@@ -16,7 +16,7 @@ module.exports = BarChart = React.createClass
             return false
 
     render: ->
-        {width, height, data, x, y} = @props
+        {width, height, data, x, y, axis_size} = @props
 
         x_extent = d3.extent(data, (d) -> d.x)
         bar_width = Math.floor(width / data.length - 1)
@@ -29,7 +29,7 @@ module.exports = BarChart = React.createClass
             .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
 
-        <svg className='bar-chart' style={{width, height}}>
+        <svg className='bar-chart' style={{width, height}} >
             {data.map (d, di) =>
                 <rect 
                     key=di

@@ -11,7 +11,7 @@ module.exports = ScatterChart = React.createClass
         fill: true
 
     render: ->
-        {width, height, data, x, y} = @props
+        {width, height, data, x, y, axis_size} = @props
         x_extent = d3.extent(data, (d) -> d.x)
         y_extent = d3.extent(data, (d) -> d.y)
         x ||= d3.scaleLinear()

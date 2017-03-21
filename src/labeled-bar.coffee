@@ -17,7 +17,7 @@ module.exports = LabeledBarChart = React.createClass
 
     render: ->
         # This is built off bins rather than coordinates
-        {width, height, data, x, y, bar_padding} = @props
+        {width, height, data, x, y, bar_padding, axis_size} = @props
         num_bars = data.length
         bar_padding ||= 10
 
