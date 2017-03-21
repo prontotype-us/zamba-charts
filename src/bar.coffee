@@ -17,7 +17,6 @@ module.exports = BarChart = React.createClass
 
     render: ->
         {width, height, data, x, y, axis_size} = @props
-
         x_extent = d3.extent(data, (d) -> d.x)
         bar_width = Math.floor(width / data.length - 1)
         # x_extent[1] += 1
