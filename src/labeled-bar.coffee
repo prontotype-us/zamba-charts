@@ -28,7 +28,7 @@ module.exports = LabeledBarChart = React.createClass
             .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
 
-        <svg className='bar-chart' style={{width, height}}>
+        <svg className='bar-chart' style={{width, height, position: 'absolute', left: axis_size}}>
             {data.map (d, di) =>
                 <rect 
                     key=di

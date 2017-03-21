@@ -68,16 +68,14 @@ module.exports = Chart = React.createClass
 
         <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
             {datas.map (data, di) =>
-                <g transform="translate(#{axis_size},0)" >
-                    {React.cloneElement children, {
-                        width: chart_width, height: chart_height, data, axis_size
-                        padding, colorer,
-                        options: chart_options
-                        key: data.id or di,
-                        color: color(data.id or di),
-                        x: @state.x, y: @state.y
-                    }}
-                </g>
+                React.cloneElement children, {
+                    width: chart_width, height: chart_height, data, axis_size
+                    padding, colorer,
+                    options: chart_options
+                    key: data.id or di,
+                    color: color(data.id or di),
+                    x: @state.x, y: @state.y
+                }
             }
             {if !options?.axes?.x?.hidden
                 <XAxis x=@state.x width=chart_width height=axis_size padding=padding position='bottom' options=options?.axes?.x />}

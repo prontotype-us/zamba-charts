@@ -34,7 +34,7 @@ module.exports = LineChart = React.createClass
 
         d = line data
 
-        <svg className='line-chart' style={{width, height}}>
+        <svg className='line-chart' style={{width, height, position: 'absolute', left: axis_size}}>
             {if fill
                 da = line [x: 0, y: 0].concat(data).concat([x: x_extent[1], y: 0])
                 <path 
