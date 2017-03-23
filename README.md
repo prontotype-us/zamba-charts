@@ -64,6 +64,15 @@ Some Chart Types allow you to flip horizontally, which transforms the data, svg 
 
 Every Chart has `height` and `width` in its props. You can also override the default x and y axes (scaled 0 to the axis' maximum value) by passing a configured d3 scale `x` or `y` into props. You can also pass in `color`, or do this on each respective datapoint. Decorate your data with color based off of a color key while you are slicing it into series and/or configuring the legend.
 
+You can also pass in `onClick`, a function of one entry of `data`, to be triggered when a slice, bar, line, or scatter plot element for a datapoint is clicked.
+
+    defaultProps:
+        onClick: (d) ->
+        height: Int
+        width: Int
+        x: d3.scale
+        y: d3.scale
+
 #### Bar
 
 Histogram chart to display counts (range) over discrete values or bins of a domain.
