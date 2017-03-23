@@ -18,7 +18,7 @@ module.exports = LineChart = React.createClass
             return false
 
     render: ->
-        {width, height, data, x, y, curve, fill} = @props
+        {width, height, data, x, y, curve, fill, axis_size} = @props
         x_extent = d3.extent(data, (d) -> d.x)
         x ||= d3.scaleLinear()
             .domain(x_extent)
@@ -34,7 +34,7 @@ module.exports = LineChart = React.createClass
 
         d = line data
 
-        <svg className='line-chart' style={{width, height}}>
+        <svg className='line-chart' style={{width, height, position: 'absolute', left: axis_size}}>
             {if fill
                 da = line [x: 0, y: 0].concat(data).concat([x: x_extent[1], y: 0])
                 <path 

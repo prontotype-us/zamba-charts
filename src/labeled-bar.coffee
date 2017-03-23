@@ -17,7 +17,7 @@ module.exports = LabeledBarChart = React.createClass
 
     render: ->
         # This is built off bins rather than coordinates
-        {width, height, data, x, y, bar_padding} = @props
+        {width, height, data, x, y, bar_padding, axis_size} = @props
         num_bars = data.length
         bar_padding ||= 10
 
@@ -28,7 +28,7 @@ module.exports = LabeledBarChart = React.createClass
             .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
 
-        <svg className='bar-chart' style={{width, height}}>
+        <svg className='bar-chart' style={{width, height, position: 'absolute', left: axis_size}}>
             {data.map (d, di) =>
                 <rect 
                     key=di

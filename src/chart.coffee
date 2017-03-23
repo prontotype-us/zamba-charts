@@ -27,10 +27,11 @@ module.exports = Chart = React.createClass
         @createAxes next_props
 
     createAxes: (props) ->
-        {width, height, data, datas, adjust, options} = props
+        {width, height, data, datas, adjust, options, axis_size} = props
         if !data? and datas?
             data = flatten datas
-
+        chart_height = height - axis_size
+        chart_width = width - axis_size
         x_extent = d3.extent(data, (d) -> d.x)
 
         if adjust
@@ -42,10 +43,10 @@ module.exports = Chart = React.createClass
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
         x = d3.scaleLinear()
-            .range([0, width])
+            .range([0, chart_width])
             .domain(x_extent)
         y = d3.scaleLinear()
-            .range([height, 0])
+            .range([chart_height, 0])
             .domain(y_extent)
 
         @setState {x, y}
@@ -63,11 +64,13 @@ module.exports = Chart = React.createClass
 
         chart_options = options.chart
         {show_follower} = options
+        chart_height = height - axis_size
+        chart_width = width - axis_size
 
         <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
             {datas.map (data, di) =>
                 React.cloneElement children, {
-                    width, height, data,
+                    width: chart_width, height: chart_height, data, axis_size
                     padding, colorer,
                     options: chart_options
                     key: data.id or di,
@@ -76,8 +79,8 @@ module.exports = Chart = React.createClass
                 }
             }
             {if !options?.axes?.x?.hidden
-                <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' options=options?.axes?.x />}
-            <YAxis y=@state.y width=axis_size height=height padding=padding options=options?.axes?.y />
+                <XAxis x=@state.x width=chart_width height=axis_size padding=padding position='bottom' options=options?.axes?.x />}
+            <YAxis y=@state.y width=axis_size height=chart_height padding=padding options=options?.axes?.y />
             {if show_follower
                 <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />}
         </div>

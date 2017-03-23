@@ -11,7 +11,7 @@ module.exports = ScatterChart = React.createClass
         fill: true
 
     render: ->
-        {width, height, data, x, y} = @props
+        {width, height, data, x, y, axis_size} = @props
         x_extent = d3.extent(data, (d) -> d.x)
         y_extent = d3.extent(data, (d) -> d.y)
         x ||= d3.scaleLinear()
@@ -21,7 +21,7 @@ module.exports = ScatterChart = React.createClass
             .domain([0, y_extent])
             .range([height, 0])
 
-        <svg className='scatter-chart' style={{width, height}}>
+        <svg className='scatter-chart' style={{width, height, position: 'absolute', left: axis_size}}>
             {data.map (d, i) =>
                 if renderPoint = @props?.options?.renderPoint
                     renderPoint d, {x, y}, i
