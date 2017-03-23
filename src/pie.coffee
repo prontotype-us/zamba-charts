@@ -18,7 +18,7 @@ module.exports = PieChart = React.createClass
             <g transform="translate(#{radius}, #{radius})">
                 {arcs.map (d, di) =>
                     <path
-                        onClick={onClick?.bind(null, data[di].label)}
+                        onClick={onClick?.bind(null, data[di])}
                         key=di
                         x=radius
                         y=radius

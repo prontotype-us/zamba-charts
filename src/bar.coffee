@@ -32,6 +32,7 @@ module.exports = BarChart = React.createClass
         <svg className='bar-chart' style={{width, height}}>
             {data.map (d, di) =>
                 <rect 
+                    onClick={onClick?.bind(null, data[di])}
                     key=di
                     x={x(d.x) - bar_width/2}
                     y={y(d.y)}

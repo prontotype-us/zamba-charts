@@ -90,6 +90,7 @@ Gauge = React.createClass
                     y=radius
                     d=d
                     fill={"#888"}
+                    onClick={onClick?.bind(null, marker)}
                 />
                 {if marker.label
                     <text className='marker-label' x={label_x-35} y=label_y key='label' style={fontWeight:'bold'} >{marker.label + ' - ' + marker.value}</text>}
