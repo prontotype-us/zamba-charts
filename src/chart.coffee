@@ -39,7 +39,7 @@ module.exports = Chart = React.createClass
             x_extent[1] += 0.5
 
         y_extent = d3.extent(data, (d) -> d.y)
-        if options.axes?.y?.zero
+        if options?.axes?.y?.zero
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
         x = d3.scaleLinear()
@@ -62,12 +62,16 @@ module.exports = Chart = React.createClass
         if data? and !datas?
             datas = [data]
 
-        chart_options = options.chart
-        {show_follower} = options
+        if options?
+            chart_options = options.chart
+            {show_follower} = options
         chart_height = height - axis_size
         chart_width = width - axis_size
 
         <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
+            {if title
+                <div className='title'>{title}</div>
+            }
             {datas.map (data, di) =>
                 React.cloneElement children, {
                     width: chart_width, height: chart_height, data, axis_size
@@ -79,8 +83,8 @@ module.exports = Chart = React.createClass
                 }
             }
             {if !options?.axes?.x?.hidden
-                <XAxis x=@state.x width=chart_width height=axis_size padding=padding position='bottom' options=options?.axes?.x />}
-            <YAxis y=@state.y width=axis_size height=chart_height padding=padding options=options?.axes?.y />
+                <XAxis x=@state.x width=chart_width axis_size=axis_size padding=padding position='bottom' options=options?.axes?.x />}
+            <YAxis y=@state.y axis_size=axis_size height=chart_height padding=padding options=options?.axes?.y />
             {if show_follower
                 <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />}
         </div>

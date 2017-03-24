@@ -11,8 +11,9 @@ axis_formats = {
 # labeled bins
 exports.XAxis = React.createClass
     render: ->
-        {width, height, x, options, padding, position, formatter, format} = @props
-        style = {width, height, position: 'absolute', left: padding}
+        {width, height, x, options, axis_size, padding, position, formatter, format} = @props
+        height = axis_size
+        style = {width, height, position: 'absolute', left: padding+axis_size}
         if position == 'bottom'
             style.bottom = 0
         else
@@ -32,8 +33,8 @@ exports.XAxis = React.createClass
 # percentage/normalized
 exports.YAxis = React.createClass
     render: ->
-        {width, height, y, options, padding, formatter, format} = @props
-
+        {width, height, y, options, axis_size, padding, formatter, format} = @props
+        width = axis_size
         <svg className='axis y-axis' style={{width, height, position: 'absolute', left: 0, top: padding}}>
             {y.ticks(options?.ticks || (height / 20)).map (t, ti) ->
                 <text y={y(t)} x={width/2} textAnchor='middle' key=ti>{t.toFixed(0)}</text>
