@@ -14,20 +14,17 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
         padding: Int
         axis_size: Int
         options:
+
             # These will be passed to a Chart as props.options
+            # Use this to pass options to the Chart types below
             chart: (chart_options)
+
             axes:
                 # These will be passed to the X Axis as props.options
-                x:
-                    hidden: Bool # hide the axis
-                    ticks: Int # number of ticks to pass to d3
-                    range: [Int, Int] # the minimum and maximum values to use when scaling the axis
-                    label_values: {
-                        Int: String # a dictionary of custom labels to put at the given axis values
-                    }
-                    zero: Bool # start the axis at 0
+                x: (see axis options below)
+
                 # These will be passed to the Y Axis as props.options
-                y: (axis_options)
+                y: (see axis options below)
 
     children:
         <ChartComponent /> # Bar/Bin/etc...
@@ -51,8 +48,13 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
         formatter: (d) -> String
         options:
             hidden: Boolean
-            ticks: Int # passed to d3
-            label: String
+            label: String # label the axis and / or add units
+            ticks: Int # number of ticks to pass to d3
+            range: [Int, Int] # the minimum and maximum values to use when scaling the axis
+            label_values: {
+                Int: String # a dictionary of custom labels to put at the given axis values
+            }
+            zero: Bool # start the axis at 0
 
 #### YAxis
 
@@ -61,8 +63,13 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
         formatter: (d) -> String
         options:
             hidden: Boolean
-            ticks: Int # passed to d3
-            label: String
+            label: String # label the axis and / or add units
+            ticks: Int # number of ticks to pass to d3
+            range: [Int, Int] # the minimum and maximum values to use when scaling the axis
+            label_values: {
+                Int: String # a dictionary of custom labels to put at the given axis values
+            }
+            zero: Bool # start the axis at 0
 
 Some Chart Types allow you to flip horizontally, which transforms the data, svg rendering functions, and labels between axes.
 
