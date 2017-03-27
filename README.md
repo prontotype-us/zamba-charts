@@ -18,7 +18,14 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
             chart: (chart_options)
             axes:
                 # These will be passed to the X Axis as props.options
-                x: (axis_options)
+                x:
+                    hidden: Bool # hide the axis
+                    ticks: Int # number of ticks to pass to d3
+                    range: [Int, Int] # the minimum and maximum values to use when scaling the axis
+                    label_values: {
+                        Int: String # a dictionary of custom labels to put at the given axis values
+                    }
+                    zero: Bool # start the axis at 0
                 # These will be passed to the Y Axis as props.options
                 y: (axis_options)
 
