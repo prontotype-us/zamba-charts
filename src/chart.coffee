@@ -85,7 +85,8 @@ module.exports = Chart = React.createClass
             }
             {if !options?.axes?.x?.hidden
                 <XAxis x=@state.x width=chart_width axis_size=axis_size padding=padding position='bottom' options=options?.axes?.x />}
-            <YAxis y=@state.y axis_size=axis_size height=chart_height padding=padding options=options?.axes?.y />
+            {if !options?.axes?.y?.hidden
+                <YAxis y=@state.y axis_size=axis_size height=chart_height padding=padding options=options?.axes?.y />}
             {if show_follower
                 <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />}
         </div>
