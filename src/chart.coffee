@@ -32,13 +32,14 @@ module.exports = Chart = React.createClass
             data = flatten datas
         chart_height = height - axis_size
         chart_width = width - axis_size
-        x_extent = d3.extent(data, (d) -> d.x)
+        x_extent = @props.options?.axes?.x?.range || d3.extent(data, (d) -> d.x)
 
         if adjust
             x_extent[0] -= 0.5
             x_extent[1] += 0.5
 
-        y_extent = d3.extent(data, (d) -> d.y)
+        y_extent = @props.options?.axes?.y?.range || d3.extent(data, (d) -> d.y)
+
         if options?.axes?.y?.zero
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
