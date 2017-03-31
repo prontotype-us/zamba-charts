@@ -55,6 +55,7 @@ App = React.createClass
     render: ->
         {width, height} = @state
         <div>
+            <HistogramTest />
             <Chart data=data width=width height=height adjust=true>
                 <BarChart color='#f93' />
             </Chart>
@@ -79,7 +80,7 @@ App = React.createClass
 HistogramTest = React.createClass
     render: ->
         <div>
-            <Histogram data=hist_data height=100 width=200 n_bins=5 />
+            <Histogram data=hist_data height=100 width=200 n_bins=5 padding={left: 20, bottom: 20} />
             <Histogram data=hist_data height=100 width=200 bin_size=1 />
             <Histogram data=hist_data height=100 width=200 n_bins=1 />
             <Histogram data=hist_data height=100 width=200 bin_size=5 />
@@ -87,6 +88,6 @@ HistogramTest = React.createClass
             <Histogram data=hist_data height=100 width=200 bin_size=0.5 />
         </div>
 
-ReactDOM.render <HistogramTest />, document.getElementById 'app'
-# ReactDOM.render <App />, document.getElementById 'app'
+# ReactDOM.render <HistogramTest />, document.getElementById 'app'
+ReactDOM.render <App />, document.getElementById 'app'
 
