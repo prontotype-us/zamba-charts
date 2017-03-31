@@ -1,11 +1,29 @@
 React = require 'react'
 ReactDOM = require 'react-dom'
-{BarChart, LineChart, PieChart, Chart} = require 'zamba-charts'
+{BarChart, LineChart, PieChart, Chart, Histogram} = require 'zamba-charts'
 require './reload'
 
 data = [0..40].map (i) ->
     x: i
     y: Math.random() * 20 + 4
+
+# Goal: numbers from 5 to (10 - epsilon) in 5 buckets
+
+hist_data = [
+    5.0
+    5.4
+    5.2
+    6.2
+    6.5
+    6.7
+    6.5
+    7.4
+    7.4
+    7.2
+    8.2
+    9.9
+    10
+].map (x) -> {x}
 
 pie_data = [0..6].map (i) ->
     random_int = Number(Math.random()*20)
@@ -58,5 +76,17 @@ App = React.createClass
             <button onClick=@animate>Animate</button>
         </div>
 
-ReactDOM.render <App />, document.getElementById 'app'
+HistogramTest = React.createClass
+    render: ->
+        <div>
+            <Histogram data=hist_data height=100 width=200 n_bins=5 />
+            <Histogram data=hist_data height=100 width=200 bin_size=1 />
+            <Histogram data=hist_data height=100 width=200 n_bins=1 />
+            <Histogram data=hist_data height=100 width=200 bin_size=5 />
+            <Histogram data=hist_data height=100 width=200 n_bins=10 />
+            <Histogram data=hist_data height=100 width=200 bin_size=0.5 />
+        </div>
+
+ReactDOM.render <HistogramTest />, document.getElementById 'app'
+# ReactDOM.render <App />, document.getElementById 'app'
 
