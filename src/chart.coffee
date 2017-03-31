@@ -29,19 +29,19 @@ module.exports = Chart = React.createClass
         @createAxes next_props
 
     createAxes: (props) ->
-        {width, height, data, datas, adjust, options, padding} = props
+        {width, height, data, datas, adjust, padding, x_axis, y_axis} = props
         if !data? and datas?
             data = flatten datas
         padding ||= 0
 
-        x_extent = options?.axes?.x?.range || d3.extent(data, (d) -> d.x)
-        y_extent = options?.axes?.y?.range || d3.extent(data, (d) -> d.y)
+        x_extent = x_axis?.domain || d3.extent(data, (d) -> d.x)
+        y_extent = y_axis?.domain || d3.extent(data, (d) -> d.y)
 
         if adjust
             x_extent[0] -= 0.5
             x_extent[1] += 0.5
 
-        if options?.axes?.y?.zero
+        if y_axis?.zero
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
         x = d3.scaleLinear()
@@ -70,7 +70,6 @@ module.exports = Chart = React.createClass
             adjust, padding, axis_size,
             show_follower,
             x_axis, y_axis,
-            options # TODO: Less nested options 
         } = @props
 
         x_axis ||= {}
@@ -90,7 +89,6 @@ module.exports = Chart = React.createClass
                     width, height,
                     data, padding
                     padding, colorer,
-                    options: options?.chart
                     key: data.id or di,
                     color: data.color or color(data.id or di),
                     x: @state.x, y: @state.y
