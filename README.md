@@ -1,38 +1,29 @@
 # Zamba Charts
 
-### General Components
+## General Components
 
-#### Chart
+### Chart
 
 A wrapper component for rendering a chart, resizing it, and managing rendering of axes and followers. Configure the chart component and its axes with `options`.
 
-    props:
-        title: String
-        width: Int
-        height: Int
-        data: [{x, y}]
-        padding: Int
-        axis_size: Int
-        options:
+```coffee
+props:
+    title: String
+    width: Int
+    height: Int
+    data: [{x, y}]
+    datas: [[{x, y}]] # For multi-series charts
+    padding: Int
+    axis_size: Int
+    show_follower: Bool
 
-            # These will be passed to a Chart as props.options
-            # Use this to pass options to the Chart types below
-            chart: (chart_options)
+    x_axis: # Passed to the X Axis as props (see options below)
+    y_axis: # Passed to the Y Axis as props (see options below)
 
-            axes:
-                # These will be passed to the X Axis as props.options
-                x: (see axis options below)
+    children: <ChartComponent /> # Bar/Bin/etc...
+```
 
-                # These will be passed to the Y Axis as props.options
-                y: (see axis options below)
-
-    children:
-        <ChartComponent /> # Bar/Bin/etc...
-        XAxis
-        YAxis
-        Follower
-
-#### Legend
+### Legend
 
     props:
         className: String
@@ -41,40 +32,38 @@ A wrapper component for rendering a chart, resizing it, and managing rendering o
             label: String
         ]
 
-#### XAxis
+### XAxis
 
-    props:
-        x: d3.scale
-        formatter: (d) -> String
-        options:
-            hidden: Boolean
-            label: String # label the axis and / or add units
-            ticks: Int # number of ticks to pass to d3
-            range: [Int, Int] # the minimum and maximum values to use when scaling the axis
-            label_values: {
-                Int: String # a dictionary of custom labels to put at the given axis values
-            }
-            zero: Bool # start the axis at 0
+```coffee
+props:
+    x: d3.scale
+    position: 'bottom' | 'top'
+    format: (d) -> String
+    hidden: Boolean
+    ticks: Int # Number of ticks to render
+    label: String # Label the axis and / or add units
+    labels: # Dictionary of custom labels to put at the given axis values
+        Int: String
+```
 
-#### YAxis
+### YAxis
 
-    props:
-        y: d3.scale
-        formatter: (d) -> String
-        options:
-            hidden: Boolean
-            label: String # label the axis and / or add units
-            ticks: Int # number of ticks to pass to d3
-            range: [Int, Int] # the minimum and maximum values to use when scaling the axis
-            label_values: {
-                Int: String # a dictionary of custom labels to put at the given axis values
-            }
-            zero: Bool # start the axis at 0
+```coffee
+props:
+    y: d3.scale
+    position: 'left' | 'right'
+    format: (d) -> String
+    hidden: Boolean
+    zero: Boolean # Start axis domain at 0
+    ticks: Int # Number of ticks to render
+    label: String # Label the axis and / or add units
+    label_values: # Dictionary of custom labels to put at the given axis values
+        Int: String
+```
 
 Some Chart Types allow you to flip horizontally, which transforms the data, svg rendering functions, and labels between axes.
 
-
-### Chart Types
+## Chart Types
 
 Every Chart has `height` and `width` in its props. You can also override the default x and y axes (scaled 0 to the axis' maximum value) by passing a configured d3 scale `x` or `y` into props. You can also pass in `color`, or do this on each respective datapoint. Decorate your data with color based off of a color key while you are slicing it into series and/or configuring the legend.
 
@@ -87,7 +76,7 @@ You can also pass in `onClick`, a function of one entry of `data`, to be trigger
         x: d3.scale
         y: d3.scale
 
-#### Bar
+### Bar
 
 Histogram chart to display counts (range) over discrete values or bins of a domain.
 
@@ -98,7 +87,7 @@ Histogram chart to display counts (range) over discrete values or bins of a doma
         ]
 
 
-#### Labeled Bar
+### Labeled Bar
 
 Histogram chart to display counts over a set of labeled bins.
 
@@ -110,18 +99,20 @@ Histogram chart to display counts over a set of labeled bins.
         bar_padding: Int
 
 
-#### Line
+### LineChart
 
-    props:
-        data: [
-            x: Int
-            y: Int
-        ]
-        curve: Boolean
-        fill: Boolean
+```coffee
+props:
+    data: [
+        x: Int
+        y: Int
+    ]
+    color: String
+    curve: Boolean
+    fill: Boolean
+```
 
-
-#### Scatter
+### Scatter
 
     props:
         fill: String #color
@@ -132,7 +123,7 @@ Histogram chart to display counts over a set of labeled bins.
         options:
             renderPoint: (d) -> <PointComponent />
 
-#### Pie
+### Pie
 
     props:
         data: [
@@ -142,7 +133,7 @@ Histogram chart to display counts over a set of labeled bins.
         onClick: (d) -> 
 
 
-#### Gauge
+### Gauge
 
 Displaying a value produced within a set range. Optionally pass in markers to display baselines, averages, or other comparisons. Override the default range of 0 to 100 with `options.{min, max}`. You can also pass in options to configure `start_angle` and `end_angle`. Default is 12 o clock, or 0 radians.
 

@@ -5,7 +5,7 @@ require './reload'
 
 data = [0..40].map (i) ->
     x: i
-    y: Math.random() * 20
+    y: Math.random() * 20 + 4
 
 pie_data = [0..6].map (i) ->
     random_int = Number(Math.random()*20)
@@ -41,15 +41,15 @@ App = React.createClass
                 <BarChart color='#f93' />
             </Chart>
             <Chart data=data width=width height=height>
-                <LineChart color='green' fill=false curve=false />
+                <LineChart color='green' curve=false />
             </Chart>
             <Chart data=data width=width height=height padding=5>
                 <LineChart color='blue' />
             </Chart>
-            <Chart data=data width=width height=height padding=10>
-                <LineChart color='blue' />
+            <Chart data=data width=width height=height padding=15>
+                <LineChart color='blue' fill=true />
             </Chart>
-            <Chart data=data width=width height=height padding=10 y_axis={position: 'right'} x_axis={position: 'top'}>
+            <Chart data=data width=width height=height y_axis={position: 'right', zero: true} x_axis={position: 'top'}>
                 <LineChart color='blue' />
             </Chart>
             <Chart data=pie_data width=width height=height adjust=true>
