@@ -33,8 +33,6 @@ module.exports = Chart = React.createClass
         if !data? and datas?
             data = flatten datas
         padding ||= 0
-        chart_height = height - padding
-        chart_width = width - padding
 
         x_extent = options?.axes?.x?.range || d3.extent(data, (d) -> d.x)
         y_extent = options?.axes?.y?.range || d3.extent(data, (d) -> d.y)
@@ -47,10 +45,10 @@ module.exports = Chart = React.createClass
             y_extent = [0, d3.max(data, (d) -> d.y)]
 
         x = d3.scaleLinear()
-            .range([0, chart_width])
+            .range([padding, width - padding])
             .domain(x_extent)
         y = d3.scaleLinear()
-            .range([chart_height, 0])
+            .range([height - padding, padding])
             .domain(y_extent)
 
         @setState {x, y}
@@ -82,23 +80,17 @@ module.exports = Chart = React.createClass
         if data? and !datas?
             datas = [data]
 
-        chart_height = height - padding
-        chart_width = width - padding
-
-        if options?
-            chart_options = options.chart
-
-        <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
+        <div className='chart' ref='container' style={{position: 'relative', width, height}} onMouseMove=@onMouseMove>
             {if title
                 <div className='title'>{title}</div>
             }
 
             {datas.map (data, di) =>
                 React.cloneElement children, {
-                    width: chart_width, height: chart_height,
+                    width, height,
                     data, padding
                     padding, colorer,
-                    options: chart_options
+                    options: options?.chart
                     key: data.id or di,
                     color: data.color or color(data.id or di),
                     x: @state.x, y: @state.y
@@ -106,13 +98,13 @@ module.exports = Chart = React.createClass
             }
 
             {if !x_axis.hidden
-                <XAxis x=@state.x width=chart_width height=axis_size padding=padding position='bottom' {...x_axis} />
+                <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' {...x_axis} />
             }
             {if !y_axis.hidden
-                <YAxis y=@state.y height=chart_height width=axis_size padding=padding position='left' {...y_axis} />
+                <YAxis y=@state.y height=height width=axis_size padding=padding position='left' {...y_axis} />
             }
 
             {if show_follower
-                <Follower width=chart_width height=chart_height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />
+                <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />
             }
         </div>

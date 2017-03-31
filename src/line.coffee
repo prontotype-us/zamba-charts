@@ -19,8 +19,10 @@ module.exports = LineChart = React.createClass
 
     render: ->
         {width, height, data, x, y, curve, fill, axis_size} = @props
+
         x_extent = d3.extent(data, (d) -> d.x)
         y_extent = d3.extent(data, (d) -> d.y)
+
         x ||= d3.scaleLinear()
             .domain(x_extent)
             .range([0, width])

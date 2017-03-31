@@ -12,8 +12,8 @@ React = require 'react'
 # value/count
 # percentage/normalized
 
-exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, label}) ->
-    style = {width, height, position: 'absolute', left: padding}
+exports.XAxis = ({width, height, x, position, format, ticks, labels, label}) ->
+    style = {width, height, position: 'absolute', left: 0}
 
     if position == 'bottom'
         style.bottom = 0
@@ -27,7 +27,9 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
         else
             x.ticks(ticks || 10).map (t, ti) =>
                 tick_label = if format? then format(t) else t.toFixed(0)
-                <text x={x(t)} y={height} textAnchor='middle' key=ti>{tick_label}</text>
+                text_y = if position == 'bottom' then height else 0
+                alignment_baseline = if position == 'bottom' then 'baseline' else 'hanging'
+                <text x={x(t)} y=text_y textAnchor='middle' key=ti alignmentBaseline=alignment_baseline>{tick_label}</text>
         }
 
         {if label
@@ -37,8 +39,8 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
         }
     </svg>
 
-exports.YAxis = ({width, height, y, position, padding, format, ticks, label}) ->
-    style = {width, height, position: 'absolute', top: padding}
+exports.YAxis = ({width, height, y, position, format, ticks, label}) ->
+    style = {width, height, position: 'absolute', top: 0}
 
     if position == 'left'
         style.left = 0
@@ -48,7 +50,9 @@ exports.YAxis = ({width, height, y, position, padding, format, ticks, label}) ->
     <svg className='axis y-axis' style=style>
         {y.ticks(ticks || (height / 20)).map (t, ti) ->
             tick_label = if format? then format(t) else t.toFixed(0)
-            <text y={y(t)} textAnchor='start' alignmentBaseline='middle' key=ti>{tick_label}</text>
+            text_x = if position == 'left' then 0 else width
+            text_anchor = if position == 'left' then 'start' else 'end'
+            <text y={y(t)} x=text_x textAnchor=text_anchor alignmentBaseline='middle' key=ti>{tick_label}</text>
         }
 
         {if label?
