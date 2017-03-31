@@ -25,31 +25,37 @@ module.exports = Chart = React.createClass
 
     componentWillMount: ->
         @createAxes @props
+
     componentWillReceiveProps: (next_props) ->
         @createAxes next_props
 
     createAxes: (props) ->
-        {width, height, data, datas, adjust, padding, x_axis, y_axis} = props
+        {x, y, width, height, data, datas, adjust, padding, x_axis, y_axis} = props
+
         if !data? and datas?
             data = flatten datas
         padding ||= 0
 
-        x_extent = x_axis?.domain || d3.extent(data, (d) -> d.x)
-        y_extent = y_axis?.domain || d3.extent(data, (d) -> d.y)
+        if !x?
+            x_extent = x_axis?.domain || d3.extent(data, (d) -> d.x)
 
-        if adjust
-            x_extent[0] -= 0.5
-            x_extent[1] += 0.5
+            if adjust
+                x_extent[0] -= 0.5
+                x_extent[1] += 0.5
 
-        if y_axis?.zero
-            y_extent = [0, d3.max(data, (d) -> d.y)]
+            x = d3.scaleLinear()
+                .range([padding, width - padding])
+                .domain(x_extent)
 
-        x = d3.scaleLinear()
-            .range([padding, width - padding])
-            .domain(x_extent)
-        y = d3.scaleLinear()
-            .range([height - padding, padding])
-            .domain(y_extent)
+        if !y?
+            y_extent = y_axis?.domain || d3.extent(data, (d) -> d.y)
+
+            if y_axis?.zero
+                y_extent = [0, d3.max(data, (d) -> d.y)]
+
+            y = d3.scaleLinear()
+                .range([height - padding, padding])
+                .domain(y_extent)
 
         @setState {x, y}
 
