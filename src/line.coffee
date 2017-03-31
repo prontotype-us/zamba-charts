@@ -5,7 +5,7 @@ module.exports = LineChart = React.createClass
     getDefaultProps: ->
         color: '#000'
         curve: true
-        fill: true
+        fill: false
 
     shouldComponentUpdate: (next_props, next_state) ->
         if next_props.data.length != @props.data.length
