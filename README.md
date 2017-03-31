@@ -4,7 +4,7 @@
 
 ### Chart
 
-A wrapper component for rendering a chart, resizing it, and managing rendering of axes and followers. Configure the chart component and its axes with `options`.
+A wrapper component for rendering a chart, resizing it, and managing rendering of axes and followers. Configure the chart component by passing props directly to the child elements, and configure axes with `y_axis` and `x_axis`.
 
 ```coffee
 props:
@@ -15,10 +15,9 @@ props:
     datas: [[{x, y}]] # For multi-series charts
     padding: Int
     axis_size: Int
-    show_follower: Bool
-
-    x_axis: # Passed to the X Axis as props (see options below)
-    y_axis: # Passed to the Y Axis as props (see options below)
+    follower: Bool | Options # Passed to Follower as props
+    x_axis: # Passed to X Axis as props (see options below)
+    y_axis: # Passed to Y Axis as props (see options below)
 
     children: <ChartComponent /> # Bar/Bin/etc...
 ```
@@ -38,7 +37,7 @@ props:
 props:
     x: d3.scale
     position: 'bottom' | 'top'
-    format: (d) -> String
+    format: FormatFunction
     hidden: Boolean
     ticks: Int # Number of ticks to render
     label: String # Label the axis and / or add units
@@ -52,7 +51,7 @@ props:
 props:
     y: d3.scale
     position: 'left' | 'right'
-    format: (d) -> String
+    format: FormatFunction
     hidden: Boolean
     zero: Boolean # Start axis domain at 0
     ticks: Int # Number of ticks to render
@@ -61,11 +60,21 @@ props:
         Int: String
 ```
 
-Some Chart Types allow you to flip horizontally, which transforms the data, svg rendering functions, and labels between axes.
+### Follower
+
+Overlay that follows the mouse position to display points on a given line or bar graph.
+
+```coffee
+props:
+    format: FormatFunction
+    color: ColorFunction
+```
 
 ## Chart Types
 
 Every Chart has `height` and `width` in its props. You can also override the default x and y axes (scaled 0 to the axis' maximum value) by passing a configured d3 scale `x` or `y` into props. You can also pass in `color`, or do this on each respective datapoint. Decorate your data with color based off of a color key while you are slicing it into series and/or configuring the legend.
+
+Some chart types allow you to flip horizontally, which transforms the data, SVG rendering functions, and labels between axes.
 
 You can also pass in `onClick`, a function of one entry of `data`, to be triggered when a slice, bar, line, or scatter plot element for a datapoint is clicked.
 
