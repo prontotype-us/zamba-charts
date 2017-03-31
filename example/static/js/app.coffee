@@ -7,11 +7,9 @@ data = [0..40].map (i) ->
     x: i
     y: Math.random() * 20
 
-
 pie_data = [0..6].map (i) ->
     random_int = Number(Math.random()*20)
     {label: "Test Data #{random_int}", count: Number(Math.random()*1000)}
-
 
 # data = [5, 3, 2, 0, 1, 2, 4, 6].map (y, x) -> {x, y}
 
@@ -25,8 +23,8 @@ App = React.createClass
         height: s
         dir: 1
 
-    componentDidMount: ->
-        setInterval @plusOne, 10
+    animate: ->
+        setInterval @plusOne, 50
 
     plusOne: ->
         f = @state.f + 1
@@ -45,12 +43,19 @@ App = React.createClass
             <Chart data=data width=width height=height>
                 <LineChart color='green' fill=false curve=false />
             </Chart>
-            <Chart data=data width=width height=height>
+            <Chart data=data width=width height=height padding=5>
+                <LineChart color='blue' />
+            </Chart>
+            <Chart data=data width=width height=height padding=10>
+                <LineChart color='blue' />
+            </Chart>
+            <Chart data=data width=width height=height padding=10 y_axis={position: 'right'} x_axis={position: 'top'}>
                 <LineChart color='blue' />
             </Chart>
             <Chart data=pie_data width=width height=height adjust=true>
                 <PieChart color='#f93' />
             </Chart>
+            <button onClick=@animate>Animate</button>
         </div>
 
 ReactDOM.render <App />, document.getElementById 'app'
