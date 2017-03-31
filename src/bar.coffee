@@ -35,7 +35,7 @@ module.exports = BarChart = React.createClass
                     x={x(d.x)}
                     y={y(d.y)}
                     width={bar_width}
-                    height={height - padding - y(d.y)}
+                    height={height - padding.bottom - y(d.y)}
                     fill=@props.color
                 />
             }

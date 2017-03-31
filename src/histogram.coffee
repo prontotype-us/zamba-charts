@@ -2,6 +2,7 @@ d3 = require 'd3'
 React = require 'react'
 BarChart = require './bar'
 Chart = require './chart'
+{transformPadding} = require './helpers'
 
 EPSILON = 0.001
 
@@ -57,17 +58,18 @@ module.exports = Histogram = React.createClass
     render: ->
         {width, height, padding, data, x, y, axis_size, title} = @props
 
+        padding = transformPadding padding
         [bins, x_extent, n_bins] = @binData()
 
         x = d3.scaleLinear()
             .domain(x_extent)
-            .range([padding, width - padding])
+            .range([padding.left, width - padding.right])
 
         y = d3.scaleLinear()
             .domain([0, d3.max(bins, (d) -> d.y)])
-            .range([height - padding, padding])
+            .range([height - padding.bottom, padding.top])
 
         <Chart data=bins x=x y=y width=width height=height padding=padding x_axis={ticks: n_bins}>
-            <BarChart bar_width={(width - 2 * padding) / (n_bins) - 2} />
+            <BarChart bar_width={(width - padding.left - padding.right) / (n_bins) - 2} />
         </Chart>
 

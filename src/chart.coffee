@@ -2,6 +2,7 @@ React = require 'react'
 d3 = require 'd3'
 {XAxis, YAxis} = require './axes'
 Follower = require './follower'
+{transformPadding} = require './helpers'
 
 flatten = (ls) ->
     flat = []
@@ -31,10 +32,10 @@ module.exports = Chart = React.createClass
 
     createAxes: (props) ->
         {x, y, width, height, data, datas, adjust, padding, x_axis, y_axis} = props
+        padding = transformPadding padding
 
         if !data? and datas?
             data = flatten datas
-        padding ||= 0
 
         if !x?
             x_extent = x_axis?.domain || d3.extent(data, (d) -> d.x)
@@ -44,7 +45,7 @@ module.exports = Chart = React.createClass
                 x_extent[1] += 0.5
 
             x = d3.scaleLinear()
-                .range([padding, width - padding])
+                .range([padding.left, width - padding.right])
                 .domain(x_extent)
 
         if !y?
@@ -54,7 +55,7 @@ module.exports = Chart = React.createClass
                 y_extent = [0, d3.max(data, (d) -> d.y)]
 
             y = d3.scaleLinear()
-                .range([height - padding, padding])
+                .range([height - padding.bottom, padding.top])
                 .domain(y_extent)
 
         @setState {x, y}
@@ -77,6 +78,7 @@ module.exports = Chart = React.createClass
             follower, x_axis, y_axis,
         } = @props
 
+        padding = transformPadding padding
         x_axis ||= {}
         y_axis ||= {}
 
@@ -91,9 +93,8 @@ module.exports = Chart = React.createClass
 
             {datas.map (data, di) =>
                 React.cloneElement children, {
-                    width, height,
-                    data, padding
-                    padding, colorer,
+                    width, height, padding,
+                    data, colorer,
                     key: data.id or di,
                     color: data.color or color(data.id or di),
                     x: @state.x, y: @state.y
@@ -101,15 +102,16 @@ module.exports = Chart = React.createClass
             }
 
             {if !x_axis.hidden
-                <XAxis x=@state.x width=width height=axis_size padding=padding position='bottom' {...x_axis} />
+                <XAxis x=@state.x width=width height=axis_size position='bottom' {...x_axis} />
             }
             {if !y_axis.hidden
-                <YAxis y=@state.y height=height width=axis_size padding=padding position='left' {...y_axis} />
+                <YAxis y=@state.y height=height width=axis_size position='left' {...y_axis} />
             }
 
-            {if follower?
+            {if follower
                 if typeof follower == 'boolean'
                     follower = {}
                 <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY {...follower} />
             }
         </div>
+
