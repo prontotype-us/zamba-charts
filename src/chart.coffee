@@ -13,8 +13,10 @@ flatten = (ls) ->
 
 module.exports = Chart = React.createClass
     getDefaultProps: ->
+        width: 100
+        height: 100
         padding: 0
-        axis_size: 50
+        axis_size: 25
         color: d3.scaleOrdinal d3.schemeCategory10
 
     getInitialState: ->
@@ -27,18 +29,19 @@ module.exports = Chart = React.createClass
         @createAxes next_props
 
     createAxes: (props) ->
-        {width, height, data, datas, adjust, options, axis_size} = props
+        {width, height, data, datas, adjust, options, padding} = props
         if !data? and datas?
             data = flatten datas
-        chart_height = height - axis_size
-        chart_width = width - axis_size
-        x_extent = @props.options?.axes?.x?.range || d3.extent(data, (d) -> d.x)
+        padding ||= 0
+        chart_height = height - padding
+        chart_width = width - padding
+
+        x_extent = options?.axes?.x?.range || d3.extent(data, (d) -> d.x)
+        y_extent = options?.axes?.y?.range || d3.extent(data, (d) -> d.y)
 
         if adjust
             x_extent[0] -= 0.5
             x_extent[1] += 0.5
-
-        y_extent = @props.options?.axes?.y?.range || d3.extent(data, (d) -> d.y)
 
         if options?.axes?.y?.zero
             y_extent = [0, d3.max(data, (d) -> d.y)]
@@ -53,40 +56,63 @@ module.exports = Chart = React.createClass
         @setState {x, y}
 
     onMouseMove: (e) ->
+        if !@props.show_follower
+            return
         bounds = @refs.container.getBoundingClientRect()
         mouseX = e.clientX - bounds.left
         mouseY = e.clientY - bounds.top
         @setState {mouseX, mouseY}
 
     render: ->
-        {width, height, data, datas, title, children, adjust, padding, colorer, axis_size, color, options} = @props
+        {
+            width, height,
+            data, datas,
+            title, children,
+            colorer, color,
+            adjust, padding, axis_size,
+            show_follower,
+            x_axis, y_axis,
+            options # TODO: Less nested options 
+        } = @props
+
+        x_axis ||= {}
+        y_axis ||= {}
+
+        # Support single datasets
         if data? and !datas?
             datas = [data]
 
+        chart_height = height - padding
+        chart_width = width - padding
+
         if options?
             chart_options = options.chart
-            {show_follower} = options
-        chart_height = height - axis_size
-        chart_width = width - axis_size
 
         <div className='chart' ref='container' style={{position: 'relative', padding, width, height}} onMouseMove=@onMouseMove>
             {if title
                 <div className='title'>{title}</div>
             }
+
             {datas.map (data, di) =>
                 React.cloneElement children, {
-                    width: chart_width, height: chart_height, data, axis_size
+                    width: chart_width, height: chart_height,
+                    data, padding
                     padding, colorer,
                     options: chart_options
                     key: data.id or di,
-                    color: color(data.id or di),
+                    color: data.color or color(data.id or di),
                     x: @state.x, y: @state.y
                 }
             }
-            {if !options?.axes?.x?.hidden
-                <XAxis x=@state.x width=chart_width axis_size=axis_size padding=padding position='bottom' options=options?.axes?.x />}
-            {if !options?.axes?.y?.hidden
-                <YAxis y=@state.y axis_size=axis_size height=chart_height padding=padding options=options?.axes?.y />}
+
+            {if !x_axis.hidden
+                <XAxis x=@state.x width=chart_width height=axis_size padding=padding position='bottom' {...x_axis} />
+            }
+            {if !y_axis.hidden
+                <YAxis y=@state.y height=chart_height width=axis_size padding=padding position='left' {...y_axis} />
+            }
+
             {if show_follower
-                <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />}
+                <Follower width=chart_width height=chart_height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />
+            }
         </div>

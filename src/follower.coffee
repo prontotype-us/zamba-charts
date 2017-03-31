@@ -6,22 +6,18 @@ r = 5
 module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY}) ->
     xx = x.invert mouseX
 
-    <div className='follower-container' style={{width, height, position: 'absolute', top: 0, left: 0}}>
-        <div className='follower-line' style={{
+    <svg className='follower-container' style={{width, height, position: 'absolute', top: 0, left: 0}}>
+        <rect className='follower-line follower-vertical' style={{
             width: 1
             height: height
-            position: 'absolute'
-            top: 0
-            left: mouseX
-            background: '#eee'
+            y: 0
+            x: mouseX
         }} />
-        <div className='follower-line' style={{
+        <rect className='follower-line follower-horizontal' style={{
             width: width
             height: 1
-            position: 'absolute'
-            top: mouseY
-            left: 0
-            background: '#eee'
+            y: mouseY
+            x: 0
         }} />
         {datas.map (data, di) ->
             follower = {}
@@ -34,31 +30,18 @@ module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY}
             if yy == 0
                 return <div key=di />
 
-            <div className='follower'
-                style={{
-                    position: 'absolute'
-                    top: y yy
-                    left: mouseX
-                }} key=di>
-                <div className='follower-dot'
-                    style={{
-                        position: 'absolute'
-                        top: -r
-                        left: -r
-                        width: 2 * r
-                        height: 2 * r
-                        borderRadius: r
-                        background: color(data.id or di)
-                    }}
+            <g className='follower' transform="translate(#{mouseX}, #{y yy})" key=di>
+                <circle className='follower-dot'
+                    r={r}
+                    style={{fill: color(data.id or di)}}
                 />
-                <span className='follower-label'
-                    style={{
-                        top: -r
-                        left: r + 5
-                    }}
+                <text className='follower-label'
+                    y={0}
+                    x={r+5}
+                    alignmentBaseline='middle'
                 >
                     {value.toFixed(4)}
-                </span>
-            </div>
+                </text>
+            </g>
         }
-    </div>
+    </svg>
