@@ -37,6 +37,7 @@ module.exports = LabeledBarChart = React.createClass
                     width={bar_width - bar_padding}
                     height={height - y(d.y)}
                     fill={d.color || @props.color}
+                    onClick={onClick?.bind(null, data[di])}
                 />
             }
         </svg>

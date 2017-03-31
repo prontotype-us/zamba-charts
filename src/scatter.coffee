@@ -30,6 +30,7 @@ module.exports = ScatterChart = React.createClass
                         cx=x(d.x)
                         cy=y(d.y)
                         fill={d.color}
+                        onClick={onClick?.bind(null, data[di])}
                     />
             }
         </svg>
