@@ -6,6 +6,10 @@ Chart = require './chart'
 EPSILON = 0.001
 
 module.exports = Histogram = React.createClass
+    getDefaultProps: ->
+        width: 100
+        height: 100
+        padding: 0
 
     binData: ->
         {data, bin_key, min, max, n_bins, bin_size} = @props
@@ -51,18 +55,19 @@ module.exports = Histogram = React.createClass
         return [bins, x_extent, n_bins]
 
     render: ->
-        {width, height, data, x, y, axis_size, title} = @props
+        {width, height, padding, data, x, y, axis_size, title} = @props
 
         [bins, x_extent, n_bins] = @binData()
 
         x = d3.scaleLinear()
             .domain(x_extent)
-            .range([0, width])
+            .range([padding, width - padding])
 
         y = d3.scaleLinear()
             .domain([0, d3.max(bins, (d) -> d.y)])
-            .range([height, 0])
+            .range([height - padding, padding])
 
-        <Chart data=bins x=x y=y width=width height=height x_axis={ticks: n_bins}>
-            <BarChart bar_width={width / (n_bins) - 2} />
+        <Chart data=bins x=x y=y width=width height=height padding=padding x_axis={ticks: n_bins}>
+            <BarChart bar_width={(width - 2 * padding) / (n_bins) - 2} />
         </Chart>
+
