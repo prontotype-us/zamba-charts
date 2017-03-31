@@ -16,9 +16,9 @@ module.exports = BarChart = React.createClass
             return false
 
     render: ->
-        {width, height, data, x, y, axis_size} = @props
+        {width, height, data, x, y, bar_width} = @props
         x_extent = d3.extent(data, (d) -> d.x)
-        bar_width = Math.floor(width / data.length - 1)
+        bar_width ||= Math.floor(width / data.length - 1)
 
         x ||= d3.scaleLinear()
             .domain(x_extent)
@@ -27,7 +27,7 @@ module.exports = BarChart = React.createClass
             .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
 
-        <svg className='bar-chart' style={{width, height, position: 'absolute', left: axis_size}} >
+        <svg className='bar-chart' style={{width, height, position: 'absolute'}} >
             {data.map (d, di) =>
                 <rect 
                     onClick={onClick?.bind(null, data[di])}

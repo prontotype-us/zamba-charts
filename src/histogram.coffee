@@ -3,61 +3,66 @@ React = require 'react'
 BarChart = require './bar'
 Chart = require './chart'
 
+EPSILON = 0.001
+
 module.exports = Histogram = React.createClass
 
     binData: ->
         {data, bin_key, min, max, n_bins, bin_size} = @props
-        values = data.map (d) -> d.value || d
-        if !@props.min?
-            min = Math.min(values...)
-        if !@props.max?
-            max = Math.max(values...)
+
+        x_extent = d3.extent data, (d) -> d.x
+
+        if min?
+            x_extent[0] = min
+        else
+            min = x_extent[0]
+        if max?
+            x_extent[1] = max
+        else
+            max = x_extent[1]
 
         if bin_size?
             n_bins = Math.ceil((max - min) / bin_size)
         else
             n_bins ||= 10
-            bin_size = (max - min) / n_bins
+            bin_size = (max - min) / (n_bins)
 
-        bins = [0..n_bins].map (t) ->
-            s_min = min + (t * bin_size)
-            s_max = min + ((t + 1) * bin_size) - 1
-            in_this_bin = values.filter (s) ->
-                if bin_key?
-                    val = s[bin_key]
-                else
-                    val = s
-                (val < s_max) && (val > s_min)
+        pointInRange = (min, max) -> (d) ->
+            if bin_key?
+                point = d[bin_key]
+            else
+                point = d
+            (point.x >= min) and (point.x < max)
+
+        bins = [0...n_bins].map (bi) ->
+            b_min = min + (bi * bin_size)
+            b_max = min + ((bi + 1) * bin_size)
+            in_this_bin = data.filter pointInRange b_min, b_max
 
             return {
-                x: (s_max + s_min) / 2
+                x: b_min
                 y: in_this_bin.length
             }
 
-        return bins
+        # Include right edge
+        edge_data = data.filter pointInRange max, max + EPSILON
+        bins[n_bins - 1].y += edge_data.length
+
+        return [bins, x_extent, n_bins]
 
     render: ->
+        {width, height, data, x, y, axis_size, title} = @props
 
-        {width, height, data, x, y, axis_size, min, max, n_bins, title, bin_size} = @props
-
-        bins = @binData()
-        values = data.map (d) -> d.value || d
-
-        if !@props.min?
-            min = Math.min(values...)
-        if !@props.max?
-            max = Math.max(values...)
+        [bins, x_extent, n_bins] = @binData()
 
         x = d3.scaleLinear()
-            .domain([min, max])
+            .domain(x_extent)
             .range([0, width])
+
         y = d3.scaleLinear()
             .domain([0, d3.max(bins, (d) -> d.y)])
             .range([height, 0])
 
-        <Chart width=width height=height data=bins title=title axis_size=axis_size >
-            <BarChart
-                axis_size=axis_size
-                x=x
-                y=y />
+        <Chart data=bins x=x y=y width=width height=height x_axis={ticks: n_bins}>
+            <BarChart bar_width={width / (n_bins) - 2} />
         </Chart>
