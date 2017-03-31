@@ -54,7 +54,7 @@ module.exports = Chart = React.createClass
         @setState {x, y}
 
     onMouseMove: (e) ->
-        if !@props.show_follower
+        if !@props.follower
             return
         bounds = @refs.container.getBoundingClientRect()
         mouseX = e.clientX - bounds.left
@@ -68,8 +68,7 @@ module.exports = Chart = React.createClass
             title, children,
             colorer, color,
             adjust, padding, axis_size,
-            show_follower,
-            x_axis, y_axis,
+            follower, x_axis, y_axis,
         } = @props
 
         x_axis ||= {}
@@ -102,7 +101,9 @@ module.exports = Chart = React.createClass
                 <YAxis y=@state.y height=height width=axis_size padding=padding position='left' {...y_axis} />
             }
 
-            {if show_follower
-                <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY />
+            {if follower?
+                if typeof follower == 'boolean'
+                    follower = {}
+                <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY {...follower} />
             }
         </div>

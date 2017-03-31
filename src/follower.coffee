@@ -3,7 +3,7 @@ d3 = require 'd3'
 
 r = 5
 
-module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY}) ->
+module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY, format}) ->
     xx = x.invert mouseX
 
     <svg className='follower-container' style={{width, height, position: 'absolute', top: 0, left: 0}}>
@@ -40,7 +40,11 @@ module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY}
                     x={r+5}
                     alignmentBaseline='middle'
                 >
-                    {value.toFixed(4)}
+                    {if format?
+                        format(value)
+                    else
+                        value.toFixed(4)
+                    }
                 </text>
             </g>
         }
