@@ -8,7 +8,6 @@ module.exports = Follower = ({width, height, data, x, y, color, mouseX, mouseY, 
     xx = x.invert mouseX
     if !multi
         data = [data]
-    console.log 'render?'
 
     <svg className='follower-container' style={{width, height, position: 'absolute', top: 0, left: 0}}>
         <rect className='follower-line follower-vertical' style={{
