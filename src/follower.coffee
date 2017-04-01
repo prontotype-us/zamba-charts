@@ -1,10 +1,14 @@
 React = require 'react'
 d3 = require 'd3'
+helpers = require './helpers'
 
 r = 5
 
-module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY, format}) ->
+module.exports = Follower = ({width, height, data, x, y, color, mouseX, mouseY, format, multi}) ->
     xx = x.invert mouseX
+    if !multi
+        data = [data]
+    console.log 'render?'
 
     <svg className='follower-container' style={{width, height, position: 'absolute', top: 0, left: 0}}>
         <rect className='follower-line follower-vertical' style={{
@@ -19,7 +23,7 @@ module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY,
             y: mouseY
             x: 0
         }} />
-        {datas.map (data, di) ->
+        {data.map (data, di) ->
             follower = {}
             yy = 0
             for d in data
@@ -33,7 +37,7 @@ module.exports = Follower = ({width, height, datas, x, y, color, mouseX, mouseY,
             <g className='follower' transform="translate(#{mouseX}, #{y yy})" key=di>
                 <circle className='follower-dot'
                     r={r}
-                    style={{fill: color(data.id or di)}}
+                    style={{fill: helpers.interpretColor(color, di)}}
                 />
                 <text className='follower-label'
                     y={0}

@@ -12,7 +12,7 @@ flatten = (ls) ->
                 flat.push i
     return flat
 
-module.exports = Chart = React.createClass
+module.exports = Chart =
     getDefaultProps: ->
         width: 100
         height: 100
@@ -30,11 +30,21 @@ module.exports = Chart = React.createClass
     componentWillReceiveProps: (next_props) ->
         @createAxes next_props
 
+    skip_shouldComponentUpdate: (next_props, next_state) ->
+        if next_props.data.length != @props.data.length
+            return true
+        else if (next_props.width != @props.width) or (next_props.height != @props.height)
+            return true
+        else if (next_props.y != @props.y) or (next_props.x != @props.x)
+            return true
+        else
+            return false
+
     createAxes: (props) ->
         {x, y, width, height, data, padding, x_axis, y_axis} = props
         padding = helpers.transformPadding padding
 
-        if Array.isArray data[0]
+        if @multi
             flat_data = []
             for _data in data
                 for i in _data
@@ -43,7 +53,7 @@ module.exports = Chart = React.createClass
             flat_data = data
 
         if !x?
-            x_extent = x_axis?.domain || d3.extent(flat_data, (d) -> d.x)
+            x_extent = x_axis?.domain || @xDomain?() || d3.extent(flat_data, (d) -> d.x)
 
             x = d3.scaleLinear()
                 .range([padding.left, width - padding.right])
@@ -72,7 +82,7 @@ module.exports = Chart = React.createClass
     render: ->
         {
             width, height, data,
-            title, color, children,
+            title, color,
             padding, axis_size,
             follower, x_axis, y_axis,
         } = @props
@@ -86,11 +96,7 @@ module.exports = Chart = React.createClass
                 <div className='title'>{title}</div>
             }
 
-            {React.cloneElement children, {
-                width, height, padding,
-                data, color
-                x: @state.x, y: @state.y
-            }}
+            {@renderChart()}
 
             {if !x_axis.hidden
                 <XAxis x=@state.x width=width height=axis_size position='bottom' {...x_axis} />
@@ -103,7 +109,7 @@ module.exports = Chart = React.createClass
             {if follower
                 if typeof follower == 'boolean'
                     follower = {}
-                <Follower width=width height=height data={data} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY {...follower} />
+                <Follower width=width height=height data={data} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY multi=@multi {...follower} />
             }
         </div>
 

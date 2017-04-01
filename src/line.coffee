@@ -1,35 +1,15 @@
 React = require 'react'
 d3 = require 'd3'
+Chart = require './chart'
 helpers = require './helpers'
 
 module.exports = LineChart = React.createClass
-    getDefaultProps: ->
-        curve: true
-        fill: false
+    mixins: [Chart]
 
-    shouldComponentUpdate: (next_props, next_state) ->
-        if next_props.data.length != @props.data.length
-            return true
-        else if (next_props.width != @props.width) or (next_props.height != @props.height)
-            return true
-        else if (next_props.y != @props.y) or (next_props.x != @props.x)
-            return true
-        else
-            return false
-
-    render: ->
-        {width, height, data, x, y, curve, fill, color} = @props
+    renderChart: ->
+        {width, height, data, curve, fill, color} = @props
+        {x, y} = @state
         console.log '[LineChart.render] data=', data
-
-        x_extent = d3.extent(data, (d) -> d.x)
-        y_extent = d3.extent(data, (d) -> d.y)
-
-        x ||= d3.scaleLinear()
-            .domain(x_extent)
-            .range([0, width])
-        y ||= d3.scaleLinear()
-            .domain(y_extent)
-            .range([height, 0])
 
         line = d3.line()
             .curve if curve then d3.curveMonotoneX else d3.curveLinear
@@ -45,7 +25,7 @@ module.exports = LineChart = React.createClass
                 da = line [first_point].concat(data).concat([last_point])
                 <path 
                     d=da
-                    fill={helpers.interpretColor(color)}
+                    fill={helpers.interpretColor(color, 0)}
                     opacity=0.2
                     stroke='none'
                 />
@@ -53,7 +33,7 @@ module.exports = LineChart = React.createClass
             <path 
                 d=d
                 fill='none'
-                stroke={helpers.interpretColor(color)}
+                stroke={helpers.interpretColor(color, 0)}
                 strokeWidth=2
             />
         </svg>

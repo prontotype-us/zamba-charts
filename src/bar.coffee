@@ -1,34 +1,21 @@
 React = require 'react'
 d3 = require 'd3'
 helpers = require './helpers'
+Chart = require './chart'
 
 module.exports = BarChart = React.createClass
-    getDefaultProps: ->
-        color: d3.scaleOrdinal d3.schemeCategory10
+    mixins: [Chart]
 
-    shouldComponentUpdate: (next_props, next_state) ->
-        if next_props.data.length != @props.data.length
-            return true
-        else if (next_props.width != @props.width) or (next_props.height != @props.height)
-            return true
-        else if (next_props.y != @props.y) or (next_props.x != @props.x)
-            return true
-        else
-            return false
+    xDomain: ->
+        x_extent = d3.extent(@props.data, (d) -> d.x)
+        x_extent[1] += 1
+        return x_extent
 
-    render: ->
-        {width, height, padding, data, x, y, bar_width, adjust, color, onClick} = @props
-        x_extent = d3.extent(data, (d) -> d.x)
-        bar_width ||= width / (data.length + 1)
-        x_extent[1] += bar_width
+    renderChart: ->
+        {width, height, padding, data, bar_width, adjust, color, onClick} = @props
+        {x, y} = @state
+        bar_width ||= width / (data.length) - 1
         bar_gap = 0
-
-        x ||= d3.scaleLinear()
-            .domain(x_extent)
-            .range([0, width])
-        y ||= d3.scaleLinear()
-            .domain([0, d3.max(data, (d) -> d.y)])
-            .range([height, 0])
 
         <svg className='bar-chart' style={{width, height, position: 'absolute', top: 0}}>
             {data.map (d, di) =>

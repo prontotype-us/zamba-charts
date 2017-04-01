@@ -1,7 +1,6 @@
-d3 = require 'd3'
 React = require 'react'
-BarChart = require './bar'
-Chart = require './chart'
+d3 = require 'd3'
+StackedBarChart = require './stacked-bar'
 helpers = require './helpers'
 
 EPSILON = 0.001
@@ -131,33 +130,5 @@ module.exports = Histogram = React.createClass
             .domain([0, y_max])
             .range([height - padding.bottom, padding.top])
 
-        <Chart data=bins x=x y=y width=width height=height padding=padding x_axis=x_axis>
-            <StackedBarChart bar_width={(width - padding.left - padding.right) / (n_bins) - 1} onClick=onClick />
-        </Chart>
-
-StackedBarChart = React.createClass
-    render: ->
-        {width, height, padding, data, x, y, bar_width, color, onClick} = @props
-        x_extent = d3.extent(data, (d) -> d.x)
-        bar_width ||= Math.floor(width / data.length - 1)
-        bar_gap = 0
-
-        <svg className='bar-chart' style={{width, height, position: 'absolute', top: 0}}>
-            {data.map (d, di) =>
-                <g transform="translate(#{x(d.x)})" onClick={onClick?.bind(null, d)}>
-                    {
-                        for group_value, group of d.grouped
-                            last_y = y(group.y0)
-                            this_y = y(group.y1)
-
-                            <rect key=group_value
-                                y={this_y + bar_gap}
-                                width={bar_width}
-                                height={last_y - this_y - bar_gap}
-                                fill={helpers.interpretColor(color, group_value)}
-                            />
-                    }
-                </g>
-            }
-        </svg>
+        <StackedBarChart data=bins width=width height=height x=x y=y bar_width={(width - padding.left - padding.right) / (n_bins) - 1} onClick=onClick />
 
