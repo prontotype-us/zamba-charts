@@ -1,35 +1,26 @@
 React = require 'react'
 d3 = require 'd3'
-
-ChartMixin = require './common'
+Chart = require './chart'
+helpers = require './helpers'
 
 module.exports = ScatterChart = React.createClass
-    mixins: [ChartMixin]
-    getDefaultProps: ->
-        color: '#000'
-        curve: true
-        fill: true
+    mixins: [Chart]
 
-    render: ->
-        {width, height, data, x, y, axis_size} = @props
-        x_extent = d3.extent(data, (d) -> d.x)
-        y_extent = d3.extent(data, (d) -> d.y)
-        x ||= d3.scaleLinear()
-            .domain(x_extent)
-            .range([0, width])
-        y ||= d3.scaleLinear()
-            .domain([0, y_extent])
-            .range([height, 0])
+    renderChart: ->
+        {width, height, data, color, r} = @props
+        {x, y} = @state
+        r ||= 4
 
-        <svg className='scatter-chart' style={{width, height, position: 'absolute', left: axis_size}}>
+        <svg className='scatter-chart' style={{width, height, position: 'absolute'}}>
             {data.map (d, i) =>
                 if renderPoint = @props?.options?.renderPoint
                     renderPoint d, {x, y}, i
                 else
-                    <circle className='dot' r=3 key=i
+                    <circle className='dot' key=i
+                        r=r
                         cx=x(d.x)
                         cy=y(d.y)
-                        fill={d.color}
+                        fill={helpers.interpretColor color, d}
                         onClick={onClick?.bind(null, data[di])}
                     />
             }
