@@ -2,7 +2,7 @@ React = require 'react'
 d3 = require 'd3'
 {XAxis, YAxis} = require './axes'
 Follower = require './follower'
-{transformPadding} = require './helpers'
+helpers = require './helpers'
 
 flatten = (ls) ->
     flat = []
@@ -31,28 +31,29 @@ module.exports = Chart = React.createClass
         @createAxes next_props
 
     createAxes: (props) ->
-        {x, y, width, height, data, datas, adjust, padding, x_axis, y_axis} = props
-        padding = transformPadding padding
+        {x, y, width, height, data, padding, x_axis, y_axis} = props
+        padding = helpers.transformPadding padding
 
-        if !data? and datas?
-            data = flatten datas
+        if Array.isArray data[0]
+            flat_data = []
+            for _data in data
+                for i in _data
+                    flat_data.push i
+        else
+            flat_data = data
 
         if !x?
-            x_extent = x_axis?.domain || d3.extent(data, (d) -> d.x)
-
-            if adjust
-                x_extent[0] -= 0.5
-                x_extent[1] += 0.5
+            x_extent = x_axis?.domain || d3.extent(flat_data, (d) -> d.x)
 
             x = d3.scaleLinear()
                 .range([padding.left, width - padding.right])
                 .domain(x_extent)
 
         if !y?
-            y_extent = y_axis?.domain || d3.extent(data, (d) -> d.y)
+            y_extent = y_axis?.domain || d3.extent(flat_data, (d) -> d.y)
 
             if y_axis?.zero
-                y_extent = [0, d3.max(data, (d) -> d.y)]
+                y_extent = [0, d3.max(flat_data, (d) -> d.y)]
 
             y = d3.scaleLinear()
                 .range([height - padding.bottom, padding.top])
@@ -70,40 +71,31 @@ module.exports = Chart = React.createClass
 
     render: ->
         {
-            width, height,
-            data, datas,
-            title, children,
-            colorer, color,
-            adjust, padding, axis_size,
+            width, height, data,
+            title, color, children,
+            padding, axis_size,
             follower, x_axis, y_axis,
         } = @props
 
-        padding = transformPadding padding
+        padding = helpers.transformPadding padding
         x_axis ||= {}
         y_axis ||= {}
-
-        # Support single datasets
-        if data? and !datas?
-            datas = [data]
 
         <div className='chart' ref='container' style={{position: 'relative', width, height}} onMouseMove=@onMouseMove>
             {if title
                 <div className='title'>{title}</div>
             }
 
-            {datas.map (data, di) =>
-                React.cloneElement children, {
-                    width, height, padding,
-                    data, colorer,
-                    key: data.id or di,
-                    color: data.color or color(data.id or di),
-                    x: @state.x, y: @state.y
-                }
-            }
+            {React.cloneElement children, {
+                width, height, padding,
+                data, color
+                x: @state.x, y: @state.y
+            }}
 
             {if !x_axis.hidden
                 <XAxis x=@state.x width=width height=axis_size position='bottom' {...x_axis} />
             }
+
             {if !y_axis.hidden
                 <YAxis y=@state.y height=height width=axis_size position='left' {...y_axis} />
             }
@@ -111,7 +103,7 @@ module.exports = Chart = React.createClass
             {if follower
                 if typeof follower == 'boolean'
                     follower = {}
-                <Follower width=width height=height datas={datas} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY {...follower} />
+                <Follower width=width height=height data={data} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY {...follower} />
             }
         </div>
 

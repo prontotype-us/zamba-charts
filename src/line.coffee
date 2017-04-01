@@ -1,9 +1,9 @@
 React = require 'react'
 d3 = require 'd3'
+helpers = require './helpers'
 
 module.exports = LineChart = React.createClass
     getDefaultProps: ->
-        color: '#000'
         curve: true
         fill: false
 
@@ -18,7 +18,7 @@ module.exports = LineChart = React.createClass
             return false
 
     render: ->
-        {width, height, data, x, y, curve, fill, axis_size} = @props
+        {width, height, data, x, y, curve, fill, color} = @props
         console.log '[LineChart.render] data=', data
 
         x_extent = d3.extent(data, (d) -> d.x)
@@ -38,12 +38,14 @@ module.exports = LineChart = React.createClass
 
         d = line data
 
-        <svg className='line-chart' style={{width, height}}>
+        <svg className='line-chart' style={{width, height, position: 'absolute', top: 0}}>
             {if fill
-                da = line [x: x.domain()[0], y: y.domain()[0]].concat(data).concat([x: x.domain()[1], y: y.domain()[0]])
+                first_point = {x: x.domain()[0], y: y.domain()[0]}
+                last_point = {x: x.domain()[1], y: y.domain()[0]}
+                da = line [first_point].concat(data).concat([last_point])
                 <path 
                     d=da
-                    fill=@props.color
+                    fill={helpers.interpretColor(color)}
                     opacity=0.2
                     stroke='none'
                 />
@@ -51,7 +53,7 @@ module.exports = LineChart = React.createClass
             <path 
                 d=d
                 fill='none'
-                stroke=@props.color
+                stroke={helpers.interpretColor(color)}
                 strokeWidth=2
             />
         </svg>
