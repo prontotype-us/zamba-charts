@@ -2,26 +2,6 @@
 
 ## General Components
 
-### Chart
-
-A wrapper component for rendering a chart, resizing it, and managing rendering of axes and followers. Configure the chart component by passing props directly to the child elements, and configure axes with `y_axis` and `x_axis`.
-
-```coffee
-props:
-    title: String
-    width: Int
-    height: Int
-    data: [{x, y}]
-    datas: [[{x, y}]] # For multi-series charts
-    padding: Int
-    axis_size: Int
-    follower: Bool | Options # Passed to Follower as props
-    x_axis: # Passed to X Axis as props (see options below)
-    y_axis: # Passed to Y Axis as props (see options below)
-
-    children: <ChartComponent /> # Bar/Bin/etc...
-```
-
 ### Legend
 
     props:
@@ -78,23 +58,48 @@ Some chart types allow you to flip horizontally, which transforms the data, SVG 
 
 You can also pass in `onClick`, a function of one entry of `data`, to be triggered when a slice, bar, line, or scatter plot element for a datapoint is clicked.
 
-    defaultProps:
-        onClick: (d) ->
-        height: Int
-        width: Int
-        x: d3.scale
-        y: d3.scale
+### ChartMixin
 
-### Bar
+A mixin for rendering a chart, resizing it, and managing rendering of axes and followers.
 
-Histogram chart to display counts (range) over discrete values or bins of a domain.
+```coffee
+props:
+    title: String
+    width: Int
+    height: Int
+    axis_size: Int
+    padding: Int | {left: Int, right: Int, top: Int, bottom: Int}
+    color: String | (String) -> String
+    follower: Bool | Options # Passed to Follower as props
+    x: d3.scale
+    y: d3.scale
+    x_axis: # Passed to XAxis as props
+    y_axis: # Passed to YAxis as props
+```
 
-    props:
-        data: [
-            x: Int
-            y: Int
-        ]
+### BarChart
 
+Bar chart to display counts (range) over discrete values or bins of a domain.
+
+```coffee
+props:
+    data: [
+        x: Number
+        y: Number
+    ]
+```
+
+## Histogram
+
+```coffee
+props:
+    data: [
+        x: Number
+        y: Number
+    ]
+    n_bins: Int
+    group_key: String | (String) -> String
+```
 
 ### Labeled Bar
 
@@ -113,10 +118,23 @@ Histogram chart to display counts over a set of labeled bins.
 ```coffee
 props:
     data: [
-        x: Int
-        y: Int
+        x: Number
+        y: Number
     ]
-    color: String
+    curve: Boolean
+    fill: Boolean
+```
+
+### MultiLineChart
+
+```coffee
+props:
+    data: [
+        [
+            x: Number
+            y: Number
+        ]
+    ]
     curve: Boolean
     fill: Boolean
 ```
