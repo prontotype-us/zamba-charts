@@ -34,8 +34,8 @@ Gauge = React.createClass
         </g>
 
     render: ->
-        {width, height, title, value, options, title} = @props
-        {min, max, start_angle, end_angle, guide, bar} = options
+        {width, height, data, title, value, title} = @props
+        {min, max, start_angle, end_angle, show_value, guide, bar, label_padding} = @props
         # {options
         #     guide
         #         thickness
@@ -47,8 +47,6 @@ Gauge = React.createClass
         #         thickness
         # 
         # }
-        {width, height, options} = @props
-        {min, max, start_angle, end_angle, show_value, guide, bar, label_padding} = options
 
         @min ||= 0
         @max ||= 100
@@ -63,10 +61,10 @@ Gauge = React.createClass
         @start_angle = start_angle ||= 0
         @end_angle = end_angle ||= Math.PI *2
 
-        @label_d_y = label_d_y = @props.options.label_d_y || 5
+        @label_d_y = label_d_y = @props.label_d_y || 5
 
         # Markers (for comparison to value)
-        markers = @props.data.filter((d) -> d.type == 'marker')
+        markers = data.filter((d) -> d.type == 'marker')
         renderMarker = (marker, i) =>
             arc = d3.arc().innerRadius(radius - thickness).outerRadius(radius).padRadius(2).cornerRadius(2)
             angle = @angleFromValue marker.value
@@ -97,7 +95,7 @@ Gauge = React.createClass
             </g>
 
         # Value data (main part of gauge)
-        value_data = @props.data.filter((d) -> d.type == 'value')[0]
+        value_data = data.filter((d) -> d.type == 'value')[0]
         {value} = value_data
         value_color = value_data.color
 
@@ -108,7 +106,7 @@ Gauge = React.createClass
 
         <svg className='gauge-chart' key='gauge' style={{position: 'relative', width, height}}>
             <g key='mover' transform="translate(#{radius+label_padding}, #{radius+label_padding})" >
-                {if !options.guide?.hidden
+                {if !guide?.hidden
                     @renderGuide()
                 }
                 <g className='gauge-bar'>

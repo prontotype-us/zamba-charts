@@ -19,7 +19,6 @@ module.exports = BarChart = React.createClass
 
         <svg className='bar-chart' style={{width, height, position: 'absolute', top: 0}}>
             {data.map (d, di) =>
-                console.log 'd', d
                 last_y = y(d.y0 or y.domain()[0])
                 this_y = y(d.y1 or d.y)
                 this_x = x(d.x)
