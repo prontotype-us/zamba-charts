@@ -130,5 +130,5 @@ module.exports = Histogram = React.createClass
             .domain([0, y_max])
             .range([height - padding.bottom, padding.top])
 
-        <StackedBarChart data=bins width=width height=height x=x y=y bar_width={(width - padding.left - padding.right) / (n_bins) - 1} onClick=onClick color=color />
+        <StackedBarChart {...@props} data=bins x=x y=y bar_width={(width - padding.left - padding.right) / (n_bins) - 1} />
 
