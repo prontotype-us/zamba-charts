@@ -6,7 +6,7 @@ module.exports = PieChart = React.createClass
         color: '#000'
 
     render: ->
-        {width, height, data, onClick} = @props
+        {width, height, data, onClick, onHover, selected, hover} = @props
 
         radius = Math.min(width, height) / 2
         color = d3.scaleOrdinal(d3.schemeCategory20)
@@ -16,17 +16,25 @@ module.exports = PieChart = React.createClass
 
         <svg className='pie-chart' style={{position: 'relative', width, height}}>
             <g transform="translate(#{radius}, #{radius})">
-                {arcs.map (d, di) =>
+                {arcs.map (arc, di) =>
+                    d = data[di]
+                    className = ''
+                    if selected == d.label
+                        className += ' selected'
+                    else if hover == d.label
+                        className += ' hover'
                     <path
-                        onClick={onClick?.bind(null, data[di])}
+                        className=className
+                        onClick={onClick?.bind(null, d)}
+                        onMouseOver={onHover?.bind(null, d)}
+                        onMouseOut={onHover}
                         key=di
                         x=radius
                         y=radius
-                        d=d
-                        fill={data[di].color || color(di)}
+                        d=arc
+                        fill={d.color || color(di)}
                     />
                 }
             </g>
         </svg>
-
 

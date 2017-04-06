@@ -17,7 +17,7 @@ module.exports = Chart =
         width: 100
         height: 100
         padding: 0
-        axis_size: 25
+        axis_size: 20
         color: d3.scaleOrdinal d3.schemeCategory10
 
     getInitialState: ->
