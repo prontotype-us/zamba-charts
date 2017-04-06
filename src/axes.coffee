@@ -12,7 +12,7 @@ React = require 'react'
 # value/count
 # percentage/normalized
 
-exports.XAxis = ({width, height, x, position, format, ticks, labels, label}) ->
+exports.XAxis = ({width, height, x, position, format, ticks, labels, label, border}) ->
     style = {width, height, position: 'absolute', left: 0}
 
     if position == 'bottom'
@@ -37,9 +37,13 @@ exports.XAxis = ({width, height, x, position, format, ticks, labels, label}) ->
                 {label}
             </text>
         }
+
+        {if border
+            <rect height=1 x=height width={width - height} />
+        }
     </svg>
 
-exports.YAxis = ({width, height, y, position, format, ticks, label}) ->
+exports.YAxis = ({width, height, y, position, format, ticks, label, border}) ->
     style = {width, height, position: 'absolute', top: 0}
 
     if position == 'left'
@@ -59,6 +63,10 @@ exports.YAxis = ({width, height, y, position, format, ticks, label}) ->
             <text className='label' y=0 textAnchor='start' key='label' style={fontWeight:'bold'}>
                 {label}
             </text>
+        }
+
+        {if border
+            <rect width=1 x=width y=0 height={height - width} />
         }
     </svg>
 
