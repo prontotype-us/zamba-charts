@@ -12,10 +12,10 @@ module.exports = BarChart = React.createClass
         return x_extent
 
     renderChart: ->
-        {width, height, padding, data, bar_width, adjust, color, onClick} = @props
+        {width, height, padding, data, bar_width, adjust, color, r, onClick} = @props
         {x, y} = @state
         bar_width ||= width / (data.length) - 1
-        bar_gap = 0
+        r ||= 0
 
         <svg className='bar-chart' style={{width, height, position: 'absolute', top: 0}}>
             {data.map (d, di) =>
@@ -25,6 +25,8 @@ module.exports = BarChart = React.createClass
                 <rect 
                     onClick={onClick?.bind(null, d)}
                     key=di
+                    rx=r
+                    ry=r
                     x={this_x}
                     y={this_y}
                     width={bar_width}

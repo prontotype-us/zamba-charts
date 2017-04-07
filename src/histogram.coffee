@@ -88,7 +88,7 @@ module.exports = Histogram = React.createClass
         return [bins, x_extent, n_bins]
 
     render: ->
-        {width, height, padding, data, x, y, axis_size, title, x_axis, y_axis, color, onClick} = @props
+        {width, height, padding, data, x, y, r, axis_size, title, x_axis, y_axis, color, onClick} = @props
 
         padding = helpers.transformPadding padding
         [bins, x_extent, n_bins] = @binData()

@@ -9,10 +9,11 @@ module.exports = StackedBarChart = React.createClass
     multi: true
 
     renderChart: ->
-        {width, height, padding, data, x, y, bar_width, color, onClick} = @props
+        {width, height, padding, data, x, y, r, bar_width, color, onClick} = @props
         x_extent = d3.extent(data, (d) -> d.x)
         bar_width ||= Math.floor(width / data.length - 1)
         bar_gap = 0
+        r ||= 0
 
         <svg className='bar-chart' style={{width, height, position: 'absolute', top: 0}}>
             {data.map (d, di) =>
@@ -24,6 +25,8 @@ module.exports = StackedBarChart = React.createClass
 
                             <rect key=group_value
                                 y={this_y + bar_gap}
+                                rx=r
+                                ry=r
                                 width={bar_width}
                                 height={last_y - this_y - bar_gap}
                                 fill={helpers.interpretColor(color, group_value)}
