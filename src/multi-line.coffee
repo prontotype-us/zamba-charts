@@ -28,7 +28,7 @@ module.exports = MultiLineChart = React.createClass
                         da = line [first_point].concat(data).concat([last_point])
                         <path
                             d=da
-                            fill={helpers.interpretColor(color, di)}
+                            fill={helpers.interpretColor(color, data)}
                             opacity=0.2
                             stroke='none'
                         />
@@ -36,7 +36,7 @@ module.exports = MultiLineChart = React.createClass
                     <path
                         d=d
                         fill='none'
-                        stroke={helpers.interpretColor(color, di)}
+                        stroke={helpers.interpretColor(color, data)}
                         strokeWidth=2
                     />
                 </g>
