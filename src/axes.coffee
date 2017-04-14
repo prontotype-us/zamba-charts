@@ -12,13 +12,14 @@ React = require 'react'
 # value/count
 # percentage/normalized
 
-exports.XAxis = ({width, height, x, position, format, ticks, labels, label, border}) ->
+exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, label, border}) ->
+    padding ||= 0
     style = {width, height, position: 'absolute', left: 0}
 
     if position == 'bottom'
-        style.bottom = 0
+        style.bottom = padding
     else
-        style.top = 0
+        style.top = padding
 
     <svg className='axis x-axis' style={style}>
         {if labels?
@@ -43,13 +44,14 @@ exports.XAxis = ({width, height, x, position, format, ticks, labels, label, bord
         }
     </svg>
 
-exports.YAxis = ({width, height, y, position, format, ticks, label, border}) ->
+exports.YAxis = ({width, height, y, padding, position, format, ticks, label, border}) ->
+    padding ||= 0
     style = {width, height, position: 'absolute', top: 0}
 
     if position == 'left'
-        style.left = 0
+        style.left = padding
     else
-        style.right = 0
+        style.right = padding
 
     <svg className='axis y-axis' style=style>
         {y.ticks(ticks || (height / 20)).map (t, ti) ->
