@@ -27,6 +27,8 @@ module.exports = Chart =
         @createAxes next_props
 
     shouldComponentUpdate: (next_props, next_state) ->
+        if Array.isArray next_props.data?[0]
+            return true # TODO: Compare inner array lengths
         if next_props.data.length != @props.data.length
             return true
         else if (next_props.width != @props.width) or (next_props.height != @props.height)
