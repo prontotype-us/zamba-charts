@@ -20,17 +20,13 @@ module.exports = Chart =
         axis_size: 20
         color: d3.scaleOrdinal d3.schemeCategory10
 
-    getInitialState: ->
-        mouseX: 200
-        mouseY: 200
-
     componentWillMount: ->
         @createAxes @props
 
     componentWillReceiveProps: (next_props) ->
         @createAxes next_props
 
-    skip_shouldComponentUpdate: (next_props, next_state) ->
+    shouldComponentUpdate: (next_props, next_state) ->
         if next_props.data.length != @props.data.length
             return true
         else if (next_props.width != @props.width) or (next_props.height != @props.height)
@@ -71,14 +67,6 @@ module.exports = Chart =
 
         @setState {x, y}
 
-    onMouseMove: (e) ->
-        if !@props.follower
-            return
-        bounds = @refs.container.getBoundingClientRect()
-        mouseX = e.clientX - bounds.left
-        mouseY = e.clientY - bounds.top
-        @setState {mouseX, mouseY}
-
     render: ->
         {
             width, height, data,
@@ -91,7 +79,7 @@ module.exports = Chart =
         x_axis ||= {}
         y_axis ||= {}
 
-        <div className='chart' ref='container' style={{position: 'relative', width, height}} onMouseMove=@onMouseMove>
+        <div className='chart' style={{position: 'relative', width, height}}>
             {if title
                 <div className='title'>{title}</div>
             }
@@ -109,7 +97,7 @@ module.exports = Chart =
             {if follower
                 if typeof follower == 'boolean'
                     follower = {}
-                <Follower width=width height=height data={data} color=color x=@state.x y=@state.y mouseX=@state.mouseX mouseY=@state.mouseY multi=@multi {...follower} />
+                <Follower width=width height=height data={data} color=color x=@state.x y=@state.y multi=@multi {...follower} />
             }
         </div>
 
