@@ -11,7 +11,13 @@ module.exports = PieChart = React.createClass
         radius = Math.min(width, height) / 2
         color = d3.scaleOrdinal(d3.schemeCategory20)
         pie = d3.pie().value((d) -> d.count)
+        if @props.start_angle
+            pie = pie.startAngle(@props.start_angle)
+        if @props.end_angle
+            pie = pie.endAngle(@props.end_angle)
         arc = d3.arc().innerRadius(0).outerRadius(radius).padRadius(2)
+        if @props.inner_radius
+            arc = arc.innerRadius(@props.inner_radius)
         arcs = pie(data).map (d) -> arc(d)
 
         <svg className='pie-chart' style={{position: 'relative', width, height}}>
