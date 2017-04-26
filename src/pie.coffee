@@ -10,7 +10,7 @@ module.exports = PieChart = React.createClass
 
         radius = Math.min(width, height) / 2
         color = d3.scaleOrdinal(d3.schemeCategory20)
-        pie = d3.pie().value((d) -> d.count)
+        pie = d3.pie().value((d) -> d.count).sort(null)
         if @props.start_angle
             pie = pie.startAngle(@props.start_angle)
         if @props.end_angle
