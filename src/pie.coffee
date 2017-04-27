@@ -4,9 +4,10 @@ d3 = require 'd3'
 module.exports = PieChart = React.createClass
     getDefaultProps: ->
         color: '#000'
+        inner_radius: 0
 
     render: ->
-        {width, height, data, onClick, onHover, selected, hover} = @props
+        {width, height, data, onClick, onHover, selected, hover, inner_radius} = @props
 
         radius = Math.min(width, height) / 2
         color = d3.scaleOrdinal(d3.schemeCategory20)
@@ -15,10 +16,12 @@ module.exports = PieChart = React.createClass
             pie = pie.startAngle(@props.start_angle)
         if @props.end_angle
             pie = pie.endAngle(@props.end_angle)
-        arc = d3.arc().innerRadius(0).outerRadius(radius).padRadius(2)
-        if @props.inner_radius
-            arc = arc.innerRadius(@props.inner_radius).cornerRadius(@props.corner_radius || 2)
-        arcs = pie(data).map (d) -> arc(d)
+
+        arc = d3.arc()
+            .outerRadius(radius)
+            .innerRadius(inner_radius)
+
+        arcs = pie(data).map arc
 
         <svg className='pie-chart' style={{position: 'relative', width, height}}>
             <g transform="translate(#{radius}, #{radius})">
