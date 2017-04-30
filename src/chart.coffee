@@ -35,6 +35,8 @@ module.exports = Chart =
             return true
         else if (next_props.y != @props.y) or (next_props.x != @props.x)
             return true
+        else if @props.checkForUpdate
+            return @props.checkForUpdate(@props, next_props, next_state)
         else
             return false
 
