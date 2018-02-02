@@ -6,6 +6,8 @@ module.exports = {
     BarChart: require './bar'
     Histogram: require './histogram'
     LabeledBarChart: require './labeled-bar'
+    # LabeledMultiBarChart: require './labeled-multi-bar'
+    LabeledMultiBarChart: require './labeled-multi-bar-preact'
     Gauge: require './gauge'
     Chart: require './chart'
     Legend: require './legend'
