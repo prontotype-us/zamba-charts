@@ -21,16 +21,16 @@ module.exports = class LabeledMultiBarChart extends React.Component
                 .domain([0, y_extent])
                 .range([0, height])
 
-            total_x = -1
+            cell_index = -1
 
             <svg className='bar-chart' style={{width, height}}>
                 {data.map (d, i_data) =>
-                    total_x++
+                    cell_index++
                     total_y = 0
                     <g className='bar' key=i_data >
                         {d.label?.split(' ').map (l, i_label) ->
                             label_y = height + (15*(i_label+1))
-                            label_x = cell_width * total_x
+                            label_x = cell_width * cell_index
                             if horizontal
                                 # TODO: improve label positioning
                                 label_y_tmp = label_y
@@ -41,10 +41,10 @@ module.exports = class LabeledMultiBarChart extends React.Component
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
                             total_y = total_y + value
-                            segment_color = colorer?(segment_key) || d.color || @props.colors[segment_key]
+                            segment_color = colorer?(segment_key) || d.color || colors?[segment_key] || "#333"
 
                             y_pos = height - y(total_y)
-                            x_pos = cell_width*(total_x)
+                            x_pos = cell_width*(cell_index)
                             segment_width = bar_width || (cell_width - bar_padding)
                             segment_height = y(value)
 
@@ -90,16 +90,16 @@ module.exports = class LabeledMultiBarChart extends React.Component
                 .domain([0, y_max])
                 .range([0, height])
 
-            total_x = -1
+            cell_index = -1
             # Height for labels
             chart_height = height + 4 * bar_padding
             <svg className='bar-chart' style={{width, height: chart_height}}>
                 {data.map (d, i_data) =>
                     total_y = 0
-                    total_x++
+                    cell_index++
                     <g className='bar' key=i_data >
                         {d.label?.split(' ').map (l, i_label) ->
-                            label_x = cell_width * total_x
+                            label_x = cell_width * cell_index
                             label_y = height + bar_padding + (15*(i_label+1))
                             if horizontal
                                 # TODO: improve label positioning
@@ -112,7 +112,7 @@ module.exports = class LabeledMultiBarChart extends React.Component
                             value = d.values[segment_key]
                             total_y = total_y + value
                             segment_color = colorer?(segment_key) || d.color || colors?[segment_key] || "#333"
-                            x_pos = cell_width * total_x
+                            x_pos = cell_width * cell_index
                             y_pos = height - y(value)
                             segment_width = bar_width || (cell_width - bar_padding)
                             segment_height = y(value)
@@ -126,7 +126,7 @@ module.exports = class LabeledMultiBarChart extends React.Component
                                 y_pos = x_pos
                                 x_pos = tmp.y_pos
 
-                            total_x++
+                            cell_index++
                             <rect 
                                 key={i_data + '.' + segment_key}
                                 y=y_pos
