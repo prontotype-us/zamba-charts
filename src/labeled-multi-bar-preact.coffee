@@ -8,7 +8,7 @@ sum = (numbers) ->
 module.exports = class LabeledMultiBarChart extends React.Component
 
     render: ->
-        {width, height, data, x, y, colors, options, colorer} = @props
+        {width, height, data, x, y, colors, options, markers, colorer} = @props
         {bar_padding, bar_width, spread, horizontal} = options
         bar_padding ||= 10
         if !spread
@@ -22,15 +22,18 @@ module.exports = class LabeledMultiBarChart extends React.Component
                 .range([0, height])
 
             cell_index = -1
-
-            <svg className='bar-chart' style={{width, height}}>
+            # Height for labels
+            chart_height = height + 4 * bar_padding
+            <svg className='bar-chart' style={{width, height: chart_height}}>
                 {data.map (d, i_data) =>
                     cell_index++
                     total_y = 0
                     <g className='bar' key=i_data >
                         {d.label?.split(' ').map (l, i_label) ->
+                            label_width = 6.5 * l.length
+                            label_x = cell_width * (i_data + 0.5) - label_width / 2
                             label_y = height + (15*(i_label+1))
-                            label_x = cell_width * cell_index
+                            # label_x = cell_width * cell_index
                             if horizontal
                                 # TODO: improve label positioning
                                 label_y_tmp = label_y
@@ -38,15 +41,17 @@ module.exports = class LabeledMultiBarChart extends React.Component
                                 label_x = label_y
                                 label_y = label_x_tmp
                             <text className='label' y=label_y x=label_x width={cell_width} >{l}</text>}
+
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
                             total_y = total_y + value
                             segment_color = colorer?(segment_key) || d.color || colors?[segment_key] || "#333"
-
-                            y_pos = height - y(total_y)
-                            x_pos = cell_width*(cell_index)
                             segment_width = bar_width || (cell_width - bar_padding)
                             segment_height = y(value)
+
+                            left_padding = (cell_width - segment_width) / 2
+                            y_pos = height - y(total_y)
+                            x_pos = left_padding + cell_width*(cell_index)
 
                             if horizontal
                                 tmp = {}
@@ -89,7 +94,6 @@ module.exports = class LabeledMultiBarChart extends React.Component
             y = d3.scaleLinear()
                 .domain([0, y_max])
                 .range([0, height])
-
             cell_index = -1
             # Height for labels
             chart_height = height + 4 * bar_padding
@@ -97,12 +101,15 @@ module.exports = class LabeledMultiBarChart extends React.Component
                 {data.map (d, i_data) =>
                     total_y = 0
                     cell_index++
+                    cell_markers = markers?.filter (m) ->
+                        m.cell_key == d.cell_key
+                    family_width = cell_width * (Object.keys(d.values).length + 1)
                     <g className='bar' key=i_data >
                         {d.label?.split(' ').map (l, i_label) ->
-                            label_x = cell_width * cell_index
+                            label_width = 6 * l.length
+                            label_x = family_width * (i_data + 0.5) - label_width / 2
                             label_y = height + bar_padding + (15*(i_label+1))
                             if horizontal
-                                # TODO: improve label positioning
                                 label_y_tmp = label_y
                                 label_x_tmp = label_x
                                 label_x = label_y
@@ -112,10 +119,11 @@ module.exports = class LabeledMultiBarChart extends React.Component
                             value = d.values[segment_key]
                             total_y = total_y + value
                             segment_color = colorer?(segment_key) || d.color || colors?[segment_key] || "#333"
-                            x_pos = cell_width * cell_index
-                            y_pos = height - y(value)
                             segment_width = bar_width || (cell_width - bar_padding)
                             segment_height = y(value)
+                            left_padding = (cell_width + (cell_width-segment_width)) / 2
+                            x_pos = left_padding + cell_width * cell_index
+                            y_pos = height - y(value)
 
                             if horizontal
                                 tmp = {}
@@ -135,6 +143,22 @@ module.exports = class LabeledMultiBarChart extends React.Component
                                 height=segment_height
                                 fill={segment_color}
                             />
+                        }
+                        {cell_markers?.map (marker, i) ->
+                            if marker.kind == 'diamond'
+                                symbol_generator = d3.symbol().type(d3.symbolDiamond).size(80)
+                                <path className='dot' key=i
+                                    d={symbol_generator()}
+                                    transform="translate(#{family_width * (i_data + 0.5)},#{y(y_max - marker.value)})"
+                                    fill={colors?[marker.series_key] || "#333"}
+                                />
+                            else
+                                <circle className='dot' key=i
+                                    r=4
+                                    cx={cell_width * (cell_index - 0.5)}
+                                    cy=y(marker.value)
+                                    fill={colors?[marker.series_key] || "#333"}
+                                />
                         }
                     </g>
                 }
