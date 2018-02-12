@@ -81,6 +81,7 @@ module.exports = class Chart extends React.Component
         padding = helpers.transformPadding padding
         x_axis ||= {}
         y_axis ||= {}
+        axis_size ||= 1
 
         <div className='chart' style={{position: 'relative', width, height}}>
             {if title
