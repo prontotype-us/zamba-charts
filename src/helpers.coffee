@@ -16,6 +16,8 @@ exports.transformPadding = (padding=0) ->
 exports.interpretColor = (color, value) ->
     if typeof color == 'string'
         return color
+    else if value?.color?
+        return value.color
     else if typeof color == 'function'
         value = value.id or value._id or value.name or value.key or value
         return color(value)

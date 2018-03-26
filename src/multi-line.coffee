@@ -1,10 +1,9 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 Chart = require './chart'
 helpers = require './helpers'
 
-module.exports = MultiLineChart = React.createClass
-    mixins: [Chart]
+module.exports = class MultiLineChart extends Chart
 
     multi: true
 

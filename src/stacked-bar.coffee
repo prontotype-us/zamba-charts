@@ -1,11 +1,9 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 Chart = require './chart'
 helpers = require './helpers'
 
-module.exports = StackedBarChart = React.createClass
-    mixins: [Chart]
-
+module.exports = class StackedBarChart extends Chart
     multi: true
 
     renderChart: ->

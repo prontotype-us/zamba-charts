@@ -1,18 +1,19 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 Chart = require './chart'
 
-module.exports = LabeledBarChart = React.createClass
-    mixins: [Chart]
+module.exports = class LabeledBarChart extends Chart
 
     renderChart: ->
         # This is built off bins rather than coordinates
-        {width, height, data, x, y, bar_padding, axis_size} = @props
+        {width, height, data, x, y, options, axis_size} = @props
+        if options?
+            {bar_padding, bar_width, horizontal} = options
         num_bars = data.length
         bar_padding ||= 10
 
         x_extent = d3.extent([0, width])
-        bar_width = Math.floor(width / num_bars - 1)
+        cell_width = Math.floor(width / num_bars - 1)
 
         y ||= d3.scaleLinear()
             .domain([0, d3.max(data, (d) -> d.y)])
@@ -20,14 +21,28 @@ module.exports = LabeledBarChart = React.createClass
 
         <svg className='bar-chart' style={{width, height, position: 'absolute'}}>
             {data.map (d, di) =>
-                <rect 
-                    key=di
-                    x={bar_width*(di)}
-                    y={y(d.y)}
-                    width={bar_width - bar_padding}
-                    height={height - y(d.y)}
-                    fill={d.color || @props.color}
-                    onClick={onClick?.bind(null, data[di])}
-                />
+                <g className='bar'>
+                    {d.label?.split(' ').map (l, i_label) ->
+                        label_width = 6.5 * l.length
+                        label_x = cell_width * (di + 0.5) - label_width / 2
+                        label_y = height + bar_padding + (15*(i_label+1))
+                        # label_x = cell_width * cell_index
+                        if horizontal
+                            # TODO: improve label positioning
+                            label_y_tmp = label_y
+                            label_x_tmp = label_x
+                            label_x = label_y
+                            label_y = label_x_tmp
+                        <text className='label' y=label_y x=label_x width={cell_width} >{l}</text>}
+                    <rect 
+                        key=di
+                        x={cell_width*(di + 0.25)}
+                        y={y(d.y)}
+                        width={bar_width || (cell_width - bar_padding)}
+                        height={height - y(d.y)}
+                        fill={d.color || @props.color}
+                        onClick={onClick?.bind(null, data[di])}
+                    />
+                </g>
             }
         </svg>

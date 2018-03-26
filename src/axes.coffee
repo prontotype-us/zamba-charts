@@ -1,4 +1,4 @@
-React = require 'react'
+React = require 'preact'
 
 # X axis
 # types of x or "domain" axes (the domain is the y axis when the chart is horizontal)
@@ -23,8 +23,11 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
 
     <svg className='axis x-axis' style={style}>
         {if labels?
-            Object.keys(labels).map (label_x) ->
-                <text x={x(label_x)} y={height} textAnchor='middle' key=label_x>{labels[label_x]}</text>
+            <g className='labels'>
+                {Object.keys(labels).map (label_x) ->
+                    <text x={x(label_x)} y={height} textAnchor='middle' key=label_x>{labels[label_x]}</text>
+                }
+            </g>
         else
             x.ticks(ticks || 10).map (t, ti) =>
                 tick_label = if format? then format(t) else t.toFixed(0)
@@ -44,9 +47,10 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
         }
     </svg>
 
-exports.YAxis = ({width, height, y, padding, position, format, ticks, label, border}) ->
+exports.YAxis = ({width, height, y, padding, position, format, ticks, label, labels, border}) ->
     padding ||= 0
     style = {width, height, position: 'absolute', top: 0}
+
 
     if position == 'left'
         style.left = padding
@@ -54,11 +58,18 @@ exports.YAxis = ({width, height, y, padding, position, format, ticks, label, bor
         style.right = padding
 
     <svg className='axis y-axis' style=style>
-        {y.ticks(ticks || (height / 20)).map (t, ti) ->
-            tick_label = if format? then format(t) else t.toFixed(0)
-            text_x = if position == 'left' then 0 else width
-            text_anchor = if position == 'left' then 'start' else 'end'
-            <text y={y(t)} x=text_x textAnchor=text_anchor alignmentBaseline='middle' key=ti>{tick_label}</text>
+        {if labels?
+            <g className='labels' transform="translate(-20,0)">
+                {Object.keys(labels).map (label_y) ->
+                    <text y={y(label_y)} x=0 textAnchor='middle' key=label_y>{labels[label_y]}</text>
+                }
+            </g>
+        else
+            y.ticks(ticks || (height / 20)).map (t, ti) ->
+                tick_label = if format? then format(t) else t.toFixed(0)
+                text_x = if position == 'left' then 0 else width
+                text_anchor = if position == 'left' then 'start' else 'end'
+                <text y={y(t)} x=text_x textAnchor=text_anchor alignmentBaseline='middle' key=ti>{tick_label}</text>
         }
 
         {if label?
@@ -68,7 +79,6 @@ exports.YAxis = ({width, height, y, padding, position, format, ticks, label, bor
         }
 
         {if border
-            <rect width=1 x=width y=0 height={height - width} />
+            <rect width=width x=0 y=0 height={height} />
         }
     </svg>
-

@@ -1,10 +1,9 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 helpers = require './helpers'
 Chart = require './chart'
 
-module.exports = BarChart = React.createClass
-    mixins: [Chart]
+module.exports = class BarChart extends Chart
 
     xDomain: ->
         x_extent = d3.extent(@props.data, (d) -> d.x)

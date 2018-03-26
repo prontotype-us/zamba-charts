@@ -1,4 +1,4 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 StackedBarChart = require './stacked-bar'
 helpers = require './helpers'
@@ -29,7 +29,7 @@ groupBy = (key, list) ->
         grouped[value].push item
     return grouped
 
-module.exports = Histogram = React.createClass
+module.exports = class Histogram extends React.Component
     getDefaultProps: ->
         width: 100
         height: 100

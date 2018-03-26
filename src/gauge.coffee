@@ -1,8 +1,8 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 color = d3.scaleOrdinal(d3.schemeCategory20)
 
-Gauge = React.createClass
+class Gauge extends React.Component
 
     angleFromValue: (val) ->
         full_arc = (@end_angle - @start_angle) || Math.PI * 2

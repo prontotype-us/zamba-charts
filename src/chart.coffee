@@ -1,7 +1,7 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 {XAxis, YAxis} = require './axes'
-Follower = require './follower'
+# Follower = require './follower'
 helpers = require './helpers'
 
 flatten = (ls) ->
@@ -12,7 +12,7 @@ flatten = (ls) ->
                 flat.push i
     return flat
 
-module.exports = Chart =
+module.exports = class Chart extends React.Component
     getDefaultProps: ->
         width: 100
         height: 100
@@ -78,10 +78,10 @@ module.exports = Chart =
             padding, axis_size,
             follower, x_axis, y_axis,
         } = @props
-
         padding = helpers.transformPadding padding
         x_axis ||= {}
         y_axis ||= {}
+        axis_size ||= 1
 
         <div className='chart' style={{position: 'relative', width, height}}>
             {if title
@@ -97,11 +97,10 @@ module.exports = Chart =
             {if !y_axis.hidden
                 <YAxis y=@state.y height=height width=axis_size position='left' {...y_axis} />
             }
-
-            {if follower
-                if typeof follower == 'boolean'
-                    follower = {}
-                <Follower width=width height=height data={data} color=color x=@state.x y=@state.y multi=@multi {...follower} />
-            }
         </div>
 
+            # {if follower
+            #     if typeof follower == 'boolean'
+            #         follower = {}
+            #     <Follower width=width height=height data={data} color=color x=@state.x y=@state.y multi=@multi {...follower} />
+            # }

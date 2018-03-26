@@ -1,10 +1,9 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 Chart = require './chart'
 helpers = require './helpers'
 
-module.exports = ScatterChart = React.createClass
-    mixins: [Chart]
+module.exports = class ScatterChart extends Chart
 
     renderChart: ->
         {width, height, data, color, r} = @props
@@ -20,6 +19,7 @@ module.exports = ScatterChart = React.createClass
                         r=r
                         cx=x(d.x)
                         cy=y(d.y)
+                        stroke={helpers.interpretColor color, d}
                         fill={helpers.interpretColor color, d}
                         onClick={onClick?.bind(null, data[di])}
                     />

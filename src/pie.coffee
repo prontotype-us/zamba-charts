@@ -1,10 +1,7 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 
-module.exports = PieChart = React.createClass
-    getDefaultProps: ->
-        color: '#000'
-        inner_radius: 0
+module.exports = class PieChart extends React.Component
 
     render: ->
         {width, height, data, onClick, onHover, selected, hover, inner_radius} = @props
@@ -46,4 +43,3 @@ module.exports = PieChart = React.createClass
                 }
             </g>
         </svg>
-

@@ -1,13 +1,15 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 helpers = require './helpers'
 
 r = 5
 
-module.exports = Follower = React.createClass
-    getInitialState: ->
-        mouseX: @props.width / 2
-        mouseY: @props.height / 2
+module.exports = class Follower extends React.Component
+    constructor: (props) ->
+        @state = {
+            mouseX: props.width / 2
+            mouseY: props.height / 2
+        }
 
     onMouseMove: (e) ->
         bounds = @refs.container.getBoundingClientRect()
@@ -23,7 +25,7 @@ module.exports = Follower = React.createClass
         if !multi
             data = [data]
 
-        <svg className='follower-container' ref='container' style={{width, height, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} onMouseMove=@onMouseMove>
+        <svg className='follower-container' ref='container' style={{width, height, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} onMouseMove={@onMouseMove.bind(@)}>
             <rect className='follower-line follower-vertical' style={{
                 width: 1
                 height: height

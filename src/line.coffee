@@ -1,10 +1,9 @@
-React = require 'react'
+React = require 'preact'
 d3 = require 'd3'
 Chart = require './chart'
 helpers = require './helpers'
 
-module.exports = LineChart = React.createClass
-    mixins: [Chart]
+module.exports = class LineChart extends Chart
 
     renderChart: ->
         {width, height, data, curve, fill, color} = @props
