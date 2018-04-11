@@ -6,6 +6,7 @@ module.exports = class PieChart extends React.Component
     render: ->
         {width, height, data, onClick, onHover, selected, hover, inner_radius} = @props
 
+        inner_radius ||= 0
         radius = Math.min(width, height) / 2
         color = d3.scaleOrdinal(d3.schemeCategory20)
         pie = d3.pie().value((d) -> d.count).sort(null)
