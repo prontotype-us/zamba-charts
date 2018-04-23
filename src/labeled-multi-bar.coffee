@@ -29,7 +29,7 @@ module.exports = class LabeledMultiBarChart extends Chart
             cell_index = -1
             # Height for labels
             chart_height = height + 4 * bar_padding
-            <svg className='bar-chart' style={{width, height: chart_height}}>
+            <svg className='bar-chart' style={{width, height: chart_height}} width=width height=chart_height>
                 {data.map (d, i_data) =>
                     cell_index++
                     total_y = 0

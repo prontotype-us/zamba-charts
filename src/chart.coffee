@@ -83,7 +83,7 @@ module.exports = class Chart extends React.Component
         y_axis ||= {}
         axis_size ||= 1
 
-        <div className='chart' style={{position: 'relative', width, height}}>
+        <div className='chart' style={{position: 'relative', width, height}}  height=height width=width>
             {if title
                 <div className='title'>{title}</div>
             }

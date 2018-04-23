@@ -19,7 +19,8 @@ module.exports = class LabeledBarChart extends Chart
             .domain([0, d3.max(data, (d) -> d.y)])
             .range([height, 0])
 
-        <svg className='bar-chart' style={{width, height, position: 'absolute'}}>
+        chart_height = height + 2 * 25
+        <svg className='bar-chart' style={{width, height: chart_height, position: 'absolute'}} height=chart_height width=width>
             {data.map (d, di) =>
                 <g className='bar'>
                     {d.label?.split(' ').map (l, i_label) ->

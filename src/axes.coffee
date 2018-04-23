@@ -21,7 +21,7 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
     else
         style.top = padding
 
-    <svg className='axis x-axis' style={style}>
+    <svg className='axis x-axis' style={style} height=height width=width>
         {if labels?
             <g className='labels'>
                 {Object.keys(labels).map (label_x) ->
@@ -57,7 +57,7 @@ exports.YAxis = ({width, height, y, padding, position, format, ticks, label, lab
     else
         style.right = padding
 
-    <svg className='axis y-axis' style=style>
+    <svg className='axis y-axis' style=style height=height width=width>
         {if labels?
             <g className='labels' transform="translate(-20,0)">
                 {Object.keys(labels).map (label_y) ->

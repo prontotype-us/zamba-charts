@@ -10,7 +10,7 @@ module.exports = class ScatterChart extends Chart
         {x, y} = @state
         r ||= 4
 
-        <svg className='scatter-chart' style={{width, height, position: 'absolute'}}>
+        <svg className='scatter-chart' style={{width, height, position: 'absolute'}} height=height width=width>
             {data.map (d, i) =>
                 if renderPoint = @props?.options?.renderPoint
                     renderPoint d, {x, y}, i
