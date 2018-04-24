@@ -37,7 +37,7 @@ module.exports = class LabeledBarChart extends Chart
                         <text className='label' y=label_y x=label_x width={cell_width} >{l}</text>}
                     <rect 
                         key=di
-                        x={cell_width*(di + 0.25)}
+                        x={cell_width*(di + 0.5) - bar_width / 2}
                         y={y(d.y)}
                         width={bar_width || (cell_width - bar_padding)}
                         height={height - y(d.y)}
