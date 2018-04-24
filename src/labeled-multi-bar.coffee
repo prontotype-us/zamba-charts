@@ -110,7 +110,7 @@ module.exports = class LabeledMultiBarChart extends Chart
             <svg
                 className='bar-chart'
                 style={{width, height: chart_height}}
-                transform="translate(#{-1*cell_width/2},0)"
+                width=width height=chart_height
             >
                 {data.map (d, i_data) =>
                     total_y = 0
@@ -121,7 +121,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                     <g className='bar' key=i_data >
                         {d.label?.split(' ').map (l, i_label) ->
                             label_width = 6 * l.length
-                            label_x = family_width * (i_data + 0.5) - label_width / 2
+                            label_x = family_width * (i_data + 0.5) - label_width / 2 - cell_width / 2
                             label_y = height + el_padding + (15*(i_label+1))
                             if horizontal
                                 label_y_tmp = label_y
@@ -135,7 +135,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                             segment_color = colorer?(segment_key) || d.color || colors?[segment_key] || "#333"
                             segment_height = y(value)
                             left_padding = (cell_width + (cell_width-segment_width)) / 2
-                            x_pos = left_padding + cell_width * cell_index
+                            x_pos = left_padding + cell_width * cell_index - cell_width / 2
                             y_pos = height - y(value)
 
                             if horizontal
@@ -164,7 +164,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 symbol_generator = d3.symbol().type(d3.symbolDiamond).size(80)
                                 <path className='dot' key=i
                                     d={symbol_generator()}
-                                    transform="translate(#{family_width * (i_data + 0.5)},#{y(y_max - marker.value)})"
+                                    transform="translate(#{family_width * (i_data + 0.5) - cell_width / 2},#{y(y_max - marker.value)})"
                                     fill={colors?[marker.series_key] || "#333"}
                                 >
                                     <title>{marker.value}</title>
@@ -172,7 +172,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                             else
                                 <circle className='dot' key=i
                                     r=4
-                                    cx={cell_width * (cell_index - 0.5)}
+                                    cx={cell_width * (cell_index - 0.5) - cell_width / 2}
                                     cy=y(marker.value)
                                     fill={colors?[marker.series_key] || "#333"}
                                 >
