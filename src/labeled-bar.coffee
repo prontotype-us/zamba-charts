@@ -7,6 +7,7 @@ module.exports = class LabeledBarChart extends Chart
     renderChart: ->
         # This is built off bins rather than coordinates
         {width, height, data, x, y, options, axis_size} = @props
+        {x, y} = @state
         if options?
             {bar_padding, bar_width, horizontal} = options
         num_bars = data.length

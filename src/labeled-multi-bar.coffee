@@ -13,6 +13,7 @@ module.exports = class LabeledMultiBarChart extends Chart
 
     renderChart: ->
         {width, height, data, x, y, colors, options, markers, colorer} = @props
+        {x, y} = @state
         {bar_padding, bar_width, spread, horizontal, el_padding} = options
         bar_padding ||= 10
         el_padding ||= EL_PADDING
@@ -99,6 +100,9 @@ module.exports = class LabeledMultiBarChart extends Chart
             num_bars += (data.length-1)
             x_extent = d3.extent([0, width])
             cell_width = Math.floor(width / num_bars - 1)
+
+            if @props.y_axis.domain?
+                y_max = @props.y_axis.domain[1]
 
             y = d3.scaleLinear()
                 .domain([0, y_max])
