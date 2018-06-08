@@ -12,7 +12,7 @@ React = require 'preact'
 # value/count
 # percentage/normalized
 
-exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, label, border}) ->
+exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, label, border, rotate}) ->
     padding ||= 0
     style = {width, height, position: 'absolute', left: 0}
 
@@ -33,7 +33,7 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
                 tick_label = if format? then format(t) else t.toFixed(0)
                 text_y = if position == 'bottom' then height else 0
                 alignment_baseline = if position == 'bottom' then 'baseline' else 'hanging'
-                <text x={x(t)} y=text_y textAnchor='middle' key=ti alignmentBaseline=alignment_baseline>{tick_label}</text>
+                <text x={x(t)} y=text_y textAnchor='middle' key=ti alignmentBaseline=alignment_baseline transform="rotate(#{rotate},#{x(t)},#{text_y})">{tick_label}</text>
         }
 
         {if label
