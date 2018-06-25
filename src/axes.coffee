@@ -21,23 +21,29 @@ exports.XAxis = ({width, height, axis_size, x, padding, position, format, ticks,
     else
         style.top = padding
 
-    <svg className='axis x-axis' style={style} height=height width=width>
+    <svg className='axis x-axis' style={style} height=axis_size width=width>
         {if labels?
             <g className='labels'>
                 {Object.keys(labels).map (label_x) ->
-                    <text x={x(label_x)} y={height} text-anchor='middle' key=label_x>{labels[label_x]}</text>
+                    <text x={x(label_x)} y=0 text-anchor='middle' key=label_x>{labels[label_x]}</text>
                 }
             </g>
         else
             x.ticks(ticks || 10).map (t, ti) =>
                 tick_label = if format? then format(t) else t.toFixed(0)
-                text_y = if position == 'bottom' then height else 0
+                text_y = if position == 'bottom' then axis_size else 0
                 alignment_baseline = if position == 'bottom' then 'baseline' else 'hanging'
-                <text x={x(t)} y=text_y text-anchor='middle' key=ti alignmentBaseline=alignment_baseline transform="rotate(#{rotate},#{x(t)},#{text_y})">{tick_label}</text>
+                if rotate > 0
+                    text_anchor = 'start'
+                else if rotate < 0
+                    text_anchor = 'end'
+                else
+                    text_anchor = 'middle'
+                <text x={x(t)} y=text_y text-anchor=text_anchor key=ti alignmentBaseline=alignment_baseline transform="rotate(#{rotate},#{x(t)},#{text_y})">{tick_label}</text>
         }
 
         {if label
-            <text className='label' x=width y={height} key='label' style={fontWeight:'bold'}>
+            <text className='label' x=width y=0 key='label' style={fontWeight:'bold'}>
                 {label}
             </text>
         }
