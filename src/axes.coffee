@@ -12,9 +12,9 @@ React = require 'preact'
 # value/count
 # percentage/normalized
 
-exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, label, border, rotate}) ->
+exports.XAxis = ({width, height, axis_size, x, padding, position, format, ticks, labels, label, border, rotate}) ->
     padding ||= 0
-    style = {width, height, position: 'absolute', left: 0}
+    style = {width, height: axis_size, position: 'absolute', left: 0, top: height}
 
     if position == 'bottom'
         style.bottom = padding
@@ -43,14 +43,13 @@ exports.XAxis = ({width, height, x, padding, position, format, ticks, labels, la
         }
 
         {if border
-            <rect height=1 x=height width={width - height} />
+            <rect height=axis_size x=axis_size width={width - axis_size} />
         }
     </svg>
 
-exports.YAxis = ({width, height, y, padding, position, format, ticks, label, labels, border}) ->
+exports.YAxis = ({width, height, axis_size, y, padding, position, format, ticks, label, labels, border}) ->
     padding ||= 0
-    style = {width, height, position: 'absolute', top: 0}
-
+    style = {width: axis_size, height, position: 'absolute', top: 0}
 
     if position == 'left'
         style.left = padding
@@ -79,6 +78,6 @@ exports.YAxis = ({width, height, y, padding, position, format, ticks, label, lab
         }
 
         {if border
-            <rect width=width x=0 y=0 height={height} />
+            <rect width=axis_size x=0 y=0 height={height} />
         }
     </svg>

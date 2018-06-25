@@ -3,6 +3,18 @@ d3 = require 'd3'
 Chart = require './chart'
 
 module.exports = class LabeledBarChart extends Chart
+    chartHeight: ->
+        max_label_length = 
+        if rotate = @props.x_axis?.rotate
+            max_label_length = 0
+            @props.data.forEach (d) ->
+                if d?.label?.length > max_label_length
+                    max_label_length = d.label.length
+            label_height = max_label_length * 6 * Math.sin(Math.PI * rotate / 180)
+        else
+            label_height = 8
+        height = @props.height + (@props.el_padding || 0) + 15 + label_height
+        return height
 
     renderChart: ->
         # This is built off bins rather than coordinates
@@ -12,6 +24,7 @@ module.exports = class LabeledBarChart extends Chart
             {bar_padding, bar_width, horizontal} = options
         num_bars = data.length
         bar_padding ||= 10
+        rotate_labels = @props.x_axis?.rotate
 
         x_extent = d3.extent([0, width])
         cell_width = Math.floor(width / num_bars - 1)
@@ -24,10 +37,15 @@ module.exports = class LabeledBarChart extends Chart
         <svg className='bar-chart' style={{width, height: chart_height, position: 'absolute'}} height=chart_height width=width>
             {data.map (d, di) =>
                 <g className='bar'>
-                    {d.label?.split(' ').map (l, i_label) ->
+                    {
+                        l = d.label
                         label_width = 6.5 * l.length
+                        label_height = 8
                         label_x = cell_width * (di + 0.5) - label_width / 2
-                        label_y = height + bar_padding + (15*(i_label+1))
+                        label_y = height + bar_padding + 15
+                        if rotate_labels > 0
+                            # If rotated clockwise, center label tip at center of cell
+                            label_x = cell_width * (di + 0.5) - label_height / 2
                         # label_x = cell_width * cell_index
                         if horizontal
                             # TODO: improve label positioning
@@ -35,7 +53,8 @@ module.exports = class LabeledBarChart extends Chart
                             label_x_tmp = label_x
                             label_x = label_y
                             label_y = label_x_tmp
-                        <text className='label' y=label_y x=label_x width={cell_width} >{l}</text>}
+                        <text className='label' y=label_y x=label_x width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})" >{l}</text>
+                    }
                     <rect 
                         key=di
                         x={cell_width*(di + 0.5) - bar_width / 2}

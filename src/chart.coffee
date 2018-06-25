@@ -71,6 +71,12 @@ module.exports = class Chart extends React.Component
 
         @setState {x, y}
 
+    calculateHeight: ->
+        if @chartHeight?
+            @chartHeight()
+        else
+            return @props.height
+
     render: ->
         {
             width, height, data,
@@ -83,7 +89,9 @@ module.exports = class Chart extends React.Component
         y_axis ||= {}
         axis_size ||= 1
 
-        <div className='chart' style={{position: 'relative', width, height}}  height=height width=width>
+        container_height = @calculateHeight()
+
+        <div className='chart' style={{position: 'relative', width, height: container_height}} height=container_height width=width>
             {if title
                 <div className='title'>{title}</div>
             }
@@ -91,11 +99,11 @@ module.exports = class Chart extends React.Component
             {@renderChart()}
 
             {if !x_axis.hidden
-                <XAxis x=@state.x width=width height=axis_size position='bottom' {...x_axis} />
+                <XAxis x=@state.x axis_size=axis_size width=width height=@props.height position='bottom' {...x_axis} />
             }
 
             {if !y_axis.hidden
-                <YAxis y=@state.y height=height width=axis_size position='left' {...y_axis} />
+                <YAxis y=@state.y axis_size=axis_size height=@props.height width=axis_size position='left' {...y_axis} />
             }
         </div>
 
