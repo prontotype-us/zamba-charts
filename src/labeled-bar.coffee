@@ -10,7 +10,7 @@ module.exports = class LabeledBarChart extends Chart
             @props.data.forEach (d) ->
                 if d?.label?.length > max_label_length
                     max_label_length = d.label.length
-            label_height = max_label_length * 6 * Math.sin(Math.PI * rotate / 180)
+            label_height = max_label_length * 6 * Math.sin(Math.PI * Math.abs(rotate) / 180)
         else
             label_height = 8
         height = @props.height + (@props.el_padding || 0) + 15 + label_height
@@ -41,19 +41,21 @@ module.exports = class LabeledBarChart extends Chart
                         l = d.label
                         label_width = 6.5 * l.length
                         label_height = 8
-                        label_x = cell_width * (di + 0.5) - label_width / 2
+                        label_x = cell_width * (di + 0.5)
                         label_y = height + bar_padding + 15
                         if rotate_labels > 0
-                            # If rotated clockwise, center label tip at center of cell
-                            label_x = cell_width * (di + 0.5) - label_height / 2
-                        # label_x = cell_width * cell_index
+                            text_anchor = 'start'
+                        else if rotate_labels < 0
+                            text_anchor = 'end'
+                        else
+                            text_anchor = 'middle'
                         if horizontal
                             # TODO: improve label positioning
                             label_y_tmp = label_y
                             label_x_tmp = label_x
                             label_x = label_y
                             label_y = label_x_tmp
-                        <text className='label' y=label_y x=label_x width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})" >{l}</text>
+                        <text className='label' y=label_y x=label_x width={cell_width} text-anchor=text_anchor transform="rotate(#{rotate_labels},#{label_x},#{label_y})" >{l}</text>
                     }
                     <rect 
                         key=di

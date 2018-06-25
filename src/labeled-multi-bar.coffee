@@ -16,7 +16,7 @@ module.exports = class LabeledMultiBarChart extends Chart
             @props.data.forEach (d) ->
                 if d?.label?.length > max_label_length
                     max_label_length = d.label.length
-            label_height = max_label_length * 6 * Math.sin(Math.PI * rotate / 180)
+            label_height = max_label_length * 6 * Math.sin(Math.PI * Math.abs(rotate) / 180)
         else
             label_height = 8
         height = @props.height + (@props.el_padding || 0) + 15 + label_height
@@ -54,11 +54,18 @@ module.exports = class LabeledMultiBarChart extends Chart
                             # based off cell_width
                             label_width = 6.5 * l.length
                             label_height = 8
-                            label_x = cell_width * (i_data + 0.5) - label_width / 2
+                            label_x = cell_width * (i_data + 0.5)
                             label_y = height + el_padding + 15
                             if rotate_labels > 0
                                 # If rotated clockwise, center label tip at center of cell
-                                label_x = cell_width * (i_data + 0.5) - label_height / 2
+                                text_anchor = 'start'
+                                label_x -= label_height / 2
+                            else if rotate_labels < 0
+                                # If rotated counterclockwise, center label tip at center of cell
+                                text_anchor = 'end'
+                                label_x += label_height / 2
+                            else
+                                text_anchor = 'middle'
 
                             if horizontal
                                 # TODO: improve label positioning
@@ -66,7 +73,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 label_x_tmp = label_x
                                 label_x = label_y
                                 label_y = label_x_tmp
-                            <text className='label' y=label_y x=label_x width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
+                            <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                         }
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
@@ -148,17 +155,22 @@ module.exports = class LabeledMultiBarChart extends Chart
                             label_width = 6 * l.length
                             label_height = 8
                             # Center label in cell
-                            label_x = family_width * (i_data + 0.5) - label_width / 2 - cell_width / 2
+                            label_x = family_width * (i_data + 0.5) - cell_width / 2
                             label_y = height + el_padding + 15
                             if rotate_labels > 0
-                                # If rotated clockwise, center label tip at center of cell
-                                label_x = family_width * (i_data + 0.5) - label_height / 2 - cell_width / 2
+                                text_anchor = 'start'
+                                label_x -= label_height / 2
+                            else if rotate_labels < 0
+                                text_anchor = 'end'
+                                label_x += label_height / 2
+                            else
+                                text_anchor = 'middle'
                             if horizontal
                                 label_y_tmp = label_y
                                 label_x_tmp = label_x
                                 label_x = label_y
                                 label_y = label_x_tmp
-                            <text className='label' y=label_y x=label_x width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
+                            <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                         }
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
