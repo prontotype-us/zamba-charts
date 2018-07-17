@@ -63,7 +63,7 @@ module.exports = class Chart extends React.Component
             y_extent = y_axis?.domain || d3.extent(flat_data, (d) -> d.y)
 
             if y_axis?.zero
-                y_extent = [0, d3.max(flat_data, (d) -> d.y)]
+                y_extent = [0, (y_axis?.domain?[1] || d3.max(flat_data, (d) -> d.y))]
 
             y = d3.scaleLinear()
                 .range([height - padding.bottom, padding.top])
