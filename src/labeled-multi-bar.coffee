@@ -16,10 +16,10 @@ module.exports = class LabeledMultiBarChart extends Chart
             @props.data.forEach (d) ->
                 if d?.label?.length > max_label_length
                     max_label_length = d.label.length
-            label_height = max_label_length * 6 * Math.sin(Math.PI * Math.abs(rotate) / 180)
+            label_height = max_label_length * 6.5 * Math.sin(Math.PI * Math.abs(rotate) / 180)
         else
             label_height = 8
-        height = @props.height + (@props.el_padding || 0) + 15 + label_height
+        height = @props.height + (@props?.options?.el_padding || 0) + 15 + label_height
         return height
 
     renderChart: ->
@@ -52,10 +52,9 @@ module.exports = class LabeledMultiBarChart extends Chart
                             l = d.label
                             # TODO: (if necessary): more sophisticated label splitter
                             # based off cell_width
-                            label_width = 6.5 * l.length
                             label_height = 8
                             label_x = cell_width * (i_data + 0.5)
-                            label_y = height + el_padding + 15
+                            label_y = height + 15 + el_padding
                             if rotate_labels > 0
                                 # If rotated clockwise, center label tip at center of cell
                                 text_anchor = 'start'
@@ -152,11 +151,10 @@ module.exports = class LabeledMultiBarChart extends Chart
                     <g className='bar' key=i_data >
                         {
                             l = d.label
-                            label_width = 6 * l.length
                             label_height = 8
                             # Center label in cell
                             label_x = family_width * (i_data + 0.5) - cell_width / 2
-                            label_y = height + el_padding + 15
+                            label_y = height + 15 + el_padding
                             if rotate_labels > 0
                                 text_anchor = 'start'
                                 label_x -= label_height / 2
