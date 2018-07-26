@@ -94,14 +94,45 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 y_pos = x_pos
                                 x_pos = tmp.y_pos
 
-                            <rect 
-                                key={i_data + '.' + segment_key}
-                                y=y_pos
-                                x=x_pos
-                                width=segment_width
-                                height=segment_height
-                                fill={segment_color}
-                            />
+                            renderBar = ->
+                                <rect
+                                    key={i_data + '.' + segment_key}
+                                    y=y_pos
+                                    x=x_pos
+                                    width=segment_width
+                                    height=segment_height
+                                    fill={segment_color}
+                                >
+                                    <title>{value}</title>
+                                </rect>
+
+                            if options.display_values? && value > 0
+                                offset_left = options.display_values.offset_left || 0
+                                offset_top = options.display_values.offset_top || 3
+                                if offset_left > 0
+                                    text_anchor = 'left'
+                                    label_x = x_pos + offset_left
+                                else
+                                    text_anchor = 'middle'
+                                    label_x = x_pos + segment_width/2
+                                <g x=x_pos y=y_pos style={height: segment_height,width: segment_width} >
+                                    {renderBar()}
+                                    <text
+                                        className='value-label'
+                                        text-anchor=text_anchor
+                                        alignment-baseline='hanging'
+                                        x=label_x
+                                        y={y_pos+offset_top}
+                                    >
+                                        {if options.display_values?.display
+                                            options.display_values?.display value
+                                        else
+                                            value
+                                        }
+                                    </text>
+                                </g>
+                            else
+                                renderBar()
                         }
                     </g>
                 }
@@ -189,16 +220,46 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 x_pos = tmp.y_pos
 
                             cell_index++
-                            <rect 
-                                key={i_data + '.' + segment_key}
-                                y=y_pos
-                                x=x_pos
-                                width=segment_width
-                                height=segment_height
-                                fill={segment_color}
-                            >
-                                <title>{value}</title>
-                            </rect>
+
+                            renderBar = ->
+                                <rect
+                                    key={i_data + '.' + segment_key}
+                                    y=y_pos
+                                    x=x_pos
+                                    width=segment_width
+                                    height=segment_height
+                                    fill={segment_color}
+                                >
+                                    <title>{value}</title>
+                                </rect>
+
+                            if options.display_values? && value > 0
+                                offset_left = options.display_values.offset_left || 0
+                                offset_top = options.display_values.offset_top || 3
+                                if offset_left > 0
+                                    text_anchor = 'left'
+                                    label_x = x_pos + offset_left
+                                else
+                                    text_anchor = 'middle'
+                                    label_x = x_pos + segment_width/2
+                                <g x=x_pos y=y_pos style={height: segment_height,width: segment_width} >
+                                    {renderBar()}
+                                    <text
+                                        className='value-label'
+                                        text-anchor=text_anchor
+                                        alignment-baseline='hanging'
+                                        x=label_x
+                                        y={y_pos+offset_top}
+                                    >
+                                        {if options.display_values?.display
+                                            options.display_values?.display value
+                                        else
+                                            value
+                                        }
+                                    </text>
+                                </g>
+                            else
+                                renderBar()
                         }
                         {cell_markers?.map (marker, i) ->
                             if marker.kind == 'diamond'
