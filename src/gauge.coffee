@@ -20,7 +20,6 @@ class Gauge extends React.Component
             value: 100
             data: 100
         }
-        # console.log d
         d = arc# arc_params
         <g key='guide' className='guide' >
             <path
@@ -48,8 +47,8 @@ class Gauge extends React.Component
         # 
         # }
 
-        @min ||= 0
-        @max ||= 100
+        @min = min || 0
+        @max = max || 100
 
         @show_value ||= false
 
@@ -61,7 +60,7 @@ class Gauge extends React.Component
         @start_angle = start_angle ||= 0
         @end_angle = end_angle ||= Math.PI *2
 
-        @label_d_y = label_d_y = @props.label_d_y || 5
+        @label_d_y = label_d_y = @props.label_d_y || 0
 
         # Markers (for comparison to value)
         markers = data.filter((d) -> d.type == 'marker')
@@ -123,7 +122,15 @@ class Gauge extends React.Component
                             fill={if di == 1 then 'none' else a_color} />}
                 </g>
                 {if show_value
-                    <text className='value' x={0} y={label_d_y} textAnchor='middle'>{value}</text>
+                    <text
+                        className='value'
+                        x={0}
+                        y={label_d_y}
+                        alignment-baseline='middle'
+                        text-anchor='middle'
+                    >
+                        {value}
+                    </text>
                 }
                 {if markers?.length
                     markers.map renderMarker
