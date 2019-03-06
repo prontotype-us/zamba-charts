@@ -1,4 +1,4 @@
-React = require 'preact'
+React = require 'react'
 d3 = require 'd3'
 color = d3.scaleOrdinal(d3.schemeCategory20)
 

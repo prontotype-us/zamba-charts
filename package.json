@@ -10,7 +10,9 @@
     "build": "cjsx --bare -o lib -c src"
   },
   "dependencies": {
-    "d3": "^4.2.8",
-    "preact": "^8.2.5"
+    "d3": "^4.2.8"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0"
   }
 }

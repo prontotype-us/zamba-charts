@@ -1,4 +1,4 @@
-React = require 'preact'
+React = require 'react'
 d3 = require 'd3'
 helpers = require './helpers'
 Chart = require './chart'

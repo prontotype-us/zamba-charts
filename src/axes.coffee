@@ -1,4 +1,4 @@
-React = require 'preact'
+React = require 'react'
 
 # X axis
 # types of x or "domain" axes (the domain is the y axis when the chart is horizontal)

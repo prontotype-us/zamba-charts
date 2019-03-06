@@ -51,12 +51,14 @@ pie_data = [0..6].map (i) ->
 s = 150
 ratio = 0.3
 
-App = React.createClass
-    getInitialState: ->
-        f: 0
-        width: s * 3
-        height: s
-        dir: 1
+class App extends React.Component
+    constructor: ->
+        @state = {
+            f: 0
+            width: s * 3
+            height: s
+            dir: 1
+        }
 
     animate: ->
         setInterval @plusOne, 50

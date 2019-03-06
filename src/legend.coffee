@@ -1,4 +1,4 @@
-React = require 'preact'
+React = require 'react'
 
 module.exports = Legend = ({data, className}) ->
     <div className="legend #{className or ''}">
