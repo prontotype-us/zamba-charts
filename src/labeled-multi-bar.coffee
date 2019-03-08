@@ -33,7 +33,10 @@ module.exports = class LabeledMultiBarChart extends Chart
         if !spread
             num_bars = data.length
             x_extent = d3.extent([0, width])
-            cell_width = Math.floor(width / num_bars - 1)
+            if horizontal
+                cell_width = Math.floor(height / num_bars - 1)
+            else
+                cell_width = Math.floor(width / num_bars - 1)
             total_ys = data.map (d) -> sum(Object.keys(d.values).map (k) -> d.values[k])
             y_extent = Math.max(total_ys...)
             y = d3.scaleLinear()
@@ -70,7 +73,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 # TODO: improve label positioning
                                 label_y_tmp = label_y
                                 label_x_tmp = label_x
-                                label_x = label_y
+                                label_x = 0
                                 label_y = label_x_tmp
                             <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                         }
@@ -92,7 +95,8 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 segment_height = segment_width
                                 segment_width = tmp.height
                                 y_pos = x_pos
-                                x_pos = tmp.y_pos
+                                # x_pos = tmp.y_pos
+                                x_pos = y(total_y) - segment_width
 
                             renderBar = ->
                                 <rect
@@ -156,7 +160,10 @@ module.exports = class LabeledMultiBarChart extends Chart
                     y_max = marker.value
             num_bars += (data.length-1)
             x_extent = d3.extent([0, width])
-            cell_width = Math.floor(width / num_bars - 1)
+            if horizontal
+                cell_width = Math.floor(height / num_bars - 1)
+            else
+                cell_width = Math.floor(width / num_bars - 1)
 
             if @props.y_axis.domain?
                 y_max = @props.y_axis.domain[1]
@@ -167,7 +174,6 @@ module.exports = class LabeledMultiBarChart extends Chart
             cell_index = -1
             # Height for labels
             chart_height = height + 4 * bar_padding
-            segment_width = bar_width || (cell_width - bar_padding)
             <svg
                 className='bar-chart'
                 style={{width, height: chart_height}}
@@ -197,13 +203,15 @@ module.exports = class LabeledMultiBarChart extends Chart
                             if horizontal
                                 label_y_tmp = label_y
                                 label_x_tmp = label_x
-                                label_x = label_y
+                                # label_x = label_y
+                                label_x = 0
                                 label_y = label_x_tmp
                             <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                         }
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
                             total_y = total_y + value
+                            segment_width = bar_width || (cell_width - bar_padding)
                             segment_color = colorer?(segment_key) || d.color || colors?[segment_key] || "#333"
                             segment_height = y(value)
                             left_padding = (cell_width + (cell_width-segment_width)) / 2
@@ -217,7 +225,8 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 segment_height = segment_width
                                 segment_width = tmp.height
                                 y_pos = x_pos
-                                x_pos = tmp.y_pos
+                                # x_pos = tmp.y_pos
+                                x_pos = 0
 
                             cell_index++
 
