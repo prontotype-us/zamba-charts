@@ -108,7 +108,6 @@ class Gauge extends React.Component
         </g>
 
     renderMarker: (marker, i) ->
-        console.log '[marker]', marker
         {bar} = @props
         radius = @computeRadius()
         angle = @angleFromValue marker.value
