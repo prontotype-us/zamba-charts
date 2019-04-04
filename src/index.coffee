@@ -7,6 +7,7 @@ module.exports = {
     Histogram: require './histogram'
     LabeledBarChart: require './labeled-bar'
     LabeledMultiBarChart: require './labeled-multi-bar'
+    LabeledMultiLineChart: require './labeled-multi-line'
     Gauge: require './gauge'
     Chart: require './chart'
     Legend: require './legend'
