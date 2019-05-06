@@ -72,7 +72,7 @@ module.exports = class LabeledMultiLineChart extends Chart
             .curve if curve then d3.curveMonotoneX else d3.curveLinear
             # The x coordinate is given, it's the bin midpoint
             .x (d) -> d.x
-            .y (d) -> y(d.y)
+            .y (d) -> height - y(d.y)
         if horizontal
             line = d3.line()
             .curve if curve then d3.curveMonotoneX else d3.curveLinear
