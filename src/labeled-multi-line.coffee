@@ -135,7 +135,7 @@ module.exports = class LabeledMultiLineChart extends Chart
                             label_x_tmp = label_x
                             label_x = 0
                             label_y = label_x_tmp
-                        <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
+                        <text className='label' y=label_y x=label_x textAnchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                     }
                 </g>
             }

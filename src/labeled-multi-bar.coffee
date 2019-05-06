@@ -75,7 +75,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 label_x_tmp = label_x
                                 label_x = 0
                                 label_y = label_x_tmp
-                            <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
+                            <text className='label' y=label_y x=label_x textAnchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                         }
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
@@ -123,8 +123,8 @@ module.exports = class LabeledMultiBarChart extends Chart
                                     {renderBar()}
                                     <text
                                         className='value-label'
-                                        text-anchor=text_anchor
-                                        alignment-baseline='hanging'
+                                        textAnchor=text_anchor
+                                        alignmentBaseline='hanging'
                                         x=label_x
                                         y={y_pos+offset_top}
                                     >
@@ -206,7 +206,7 @@ module.exports = class LabeledMultiBarChart extends Chart
                                 # label_x = label_y
                                 label_x = 0
                                 label_y = label_x_tmp
-                            <text className='label' y=label_y x=label_x text-anchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
+                            <text className='label' y=label_y x=label_x textAnchor=text_anchor width={cell_width} transform="rotate(#{rotate_labels},#{label_x},#{label_y})">{l}</text>
                         }
                         {Object.keys(d.values).map (segment_key) ->
                             value = d.values[segment_key]
@@ -255,8 +255,8 @@ module.exports = class LabeledMultiBarChart extends Chart
                                     {renderBar()}
                                     <text
                                         className='value-label'
-                                        text-anchor=text_anchor
-                                        alignment-baseline='hanging'
+                                        textAnchor=text_anchor
+                                        alignmentBaseline='hanging'
                                         x=label_x
                                         y={y_pos+offset_top}
                                     >

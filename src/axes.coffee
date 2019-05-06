@@ -25,7 +25,7 @@ exports.XAxis = ({width, height, axis_size, x, padding, position, format, ticks,
         {if labels?
             <g className='labels'>
                 {Object.keys(labels).map (label_x) ->
-                    <text x={x(label_x)} y=0 text-anchor='middle' key=label_x>{labels[label_x]}</text>
+                    <text x={x(label_x)} y=0 textAnchor='middle' key=label_x>{labels[label_x]}</text>
                 }
             </g>
         else
@@ -39,7 +39,7 @@ exports.XAxis = ({width, height, axis_size, x, padding, position, format, ticks,
                     text_anchor = 'end'
                 else
                     text_anchor = 'middle'
-                <text x={x(t)} y=text_y text-anchor=text_anchor key=ti alignmentBaseline=alignment_baseline transform="rotate(#{rotate},#{x(t)},#{text_y})">{tick_label}</text>
+                <text x={x(t)} y=text_y textAnchor=text_anchor key=ti alignmentBaseline=alignment_baseline transform="rotate(#{rotate},#{x(t)},#{text_y})">{tick_label}</text>
         }
 
         {if label
@@ -69,18 +69,18 @@ exports.YAxis = ({width, height, axis_size, y, padding, position, format, ticks,
         <g className='labels' transform="translate(-#{labels_width},0)">
             {if labels?
                 Object.keys(labels).map (label_y) ->
-                    <text y={y(label_y)} x={labels_width-5} text-anchor='end' key=label_y>{labels[label_y]}</text>
+                    <text y={y(label_y)} x={labels_width-5} textAnchor='end' key=label_y>{labels[label_y]}</text>
             else
                 y.ticks(ticks || (height / 20)).map (t, ti) ->
                     tick_label = if format? then format(t) else t.toFixed(0)
                     text_x = if position == 'left' then 0 else width
                     text_anchor = if position == 'left' then 'start' else 'end'
-                    <text y={y(t)} x=text_x text-anchor=text_anchor alignmentBaseline='middle' key=ti>{tick_label}</text>
+                    <text y={y(t)} x=text_x textAnchor=text_anchor alignmentBaseline='middle' key=ti>{tick_label}</text>
             }
         </g>
 
         {if label?
-            <text className='label' y=0 text-anchor='start' key='label' style={fontWeight:'bold'}>
+            <text className='label' y=0 textAnchor='start' key='label' style={fontWeight:'bold'}>
                 {label}
             </text>
         }

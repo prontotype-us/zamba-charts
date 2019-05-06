@@ -70,8 +70,8 @@ class Gauge extends React.Component
                         className='value'
                         x={0}
                         y={label_y}
-                        alignment-baseline='middle'
-                        text-anchor='middle'
+                        alignmentBaseline='middle'
+                        textAnchor='middle'
                     >
                         {value}
                     </text>

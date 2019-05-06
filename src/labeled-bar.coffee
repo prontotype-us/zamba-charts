@@ -55,7 +55,7 @@ module.exports = class LabeledBarChart extends Chart
                             label_x_tmp = label_x
                             label_x = label_y
                             label_y = label_x_tmp
-                        <text className='label' y=label_y x=label_x width={cell_width} text-anchor=text_anchor transform="rotate(#{rotate_labels},#{label_x},#{label_y})" >{l}</text>
+                        <text className='label' y=label_y x=label_x width={cell_width} textAnchor=text_anchor transform="rotate(#{rotate_labels},#{label_x},#{label_y})" >{l}</text>
                     }
                     <rect 
                         key=di
